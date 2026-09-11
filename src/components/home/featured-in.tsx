@@ -17,9 +17,13 @@ export function FeaturedIn({
 
   return (
     <section className="overflow-hidden border-y border-primary/10 bg-accent/35 py-12">
-      {heading ? <p className="kicker mb-6 text-center">{heading}</p> : null}
-      <div className="marquee">
-        <div className="marquee-track">
+      {heading ? (
+        <p className="mb-6 text-center font-mono text-[10px] tracking-[0.19em] text-primary uppercase">
+          {heading}
+        </p>
+      ) : null}
+      <div className="overflow-hidden">
+        <div className="flex w-max animate-marquee">
           {loop.map((item, index) => (
             <span key={`${item._id}-${index}`} className="font-display mx-8 text-3xl text-ink/80">
               {item.publication}

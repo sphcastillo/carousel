@@ -8,9 +8,17 @@ export function Wordmark({
   inverted?: boolean
 }) {
   return (
-    <span className={`wordmark ${inverted ? 'wordmark-light' : ''} ${className}`}>
-      <span className="wordmark-title">Carousel</span>
-      <span className="wordmark-sub">Hair Extensions</span>
+    <span className={`flex flex-col leading-none ${className}`}>
+      <span className={`font-display text-[2rem] tracking-[-0.03em] ${inverted ? 'text-canvas' : ''}`}>
+        Carousel
+      </span>
+      <span
+        className={`mt-[0.35rem] font-mono text-[0.58rem] tracking-[0.28em] uppercase ${
+          inverted ? 'text-canvas/72' : ''
+        }`}
+      >
+        Hair Extensions
+      </span>
     </span>
   )
 }

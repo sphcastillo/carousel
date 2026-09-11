@@ -25,14 +25,20 @@ export function InstagramStrip({
     <section className="border-t border-primary/10 py-24">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 md:flex-row md:items-end md:justify-between md:px-8">
         <div>
-          <p className="kicker">Instagram</p>
-          {heading ? <h2 className="display text-5xl md:text-7xl">{heading}</h2> : null}
+          <p className="mb-3.5 font-mono text-[10px] tracking-[0.19em] text-primary uppercase">Instagram</p>
+          {heading ? (
+            <h2 className="font-display text-5xl leading-[0.78] tracking-[-0.04em] md:text-7xl">{heading}</h2>
+          ) : null}
           {handle ? (
             <p className="mt-3 font-mono text-[10px] tracking-[0.19em] uppercase text-primary">@{handle}</p>
           ) : null}
         </div>
         {profileUrl ? (
-          <Link href={profileUrl} target="_blank" className="btn-round">
+          <Link
+            href={profileUrl}
+            target="_blank"
+            className="inline-flex items-center justify-center rounded-full border border-primary px-[1.35rem] py-[0.85rem] font-mono text-[10px] tracking-[0.19em] text-primary uppercase transition hover:bg-primary hover:text-canvas"
+          >
             {ctaLabel || 'Follow along'}
           </Link>
         ) : null}
@@ -43,7 +49,7 @@ export function InstagramStrip({
             <Link
               key={post._id}
               href={post.permalink || profileUrl || '#'}
-              className="photo-figure group"
+              className="group border border-primary/18 bg-surface p-[0.55rem] pb-[0.7rem]"
             >
               <div className="relative aspect-square overflow-hidden">
                 <SanityImage
@@ -53,7 +59,11 @@ export function InstagramStrip({
                   sizes="25vw"
                 />
               </div>
-              {post.caption ? <p className="photo-caption">{post.caption}</p> : null}
+              {post.caption ? (
+                <p className="mt-[0.55rem] font-mono text-[0.58rem] tracking-[0.16em] text-ink/62 uppercase">
+                  {post.caption}
+                </p>
+              ) : null}
             </Link>
           ) : null,
         )}

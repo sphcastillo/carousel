@@ -6,6 +6,13 @@ type Portrait = {
   asset?: unknown
 }
 
+const collagePlacement = [
+  'md:row-span-2 max-md:aspect-[4/5]',
+  'md:col-start-2 md:row-start-1 max-md:aspect-[4/3]',
+  'md:col-start-3 md:row-start-1 max-md:aspect-[4/3]',
+  'md:col-span-2 md:col-start-2 md:row-start-2 max-md:aspect-[4/3]',
+]
+
 export function PortraitGallery({
   block,
 }: {
@@ -29,31 +36,42 @@ export function PortraitGallery({
   return (
     <>
       {block.statement ? (
-        <section className="statement-band">
-          <div className="statement-frame">
-            <p className="statement-copy">
+        <section className="bg-[color-mix(in_srgb,var(--accent)_78%,white)] px-5 py-[2.75rem] md:px-12 md:py-[4.5rem]">
+          <div className="mx-auto max-w-[86rem] border border-ink/18 px-7 py-[3.25rem] md:px-[6.5rem] md:py-[5.5rem]">
+            <p className="max-w-[14.5em] font-display text-[clamp(2.05rem,4.2vw,3.35rem)] leading-[1.18] tracking-[-0.03em] text-ink">
               <AccentedText text={block.statement} accent={block.statementAccent} />
             </p>
           </div>
         </section>
       ) : null}
 
-      <section className="dressing-room mx-auto max-w-[92rem]">
+      <section className="mx-auto max-w-368 px-5 pt-[4.5rem] pb-[5.5rem] md:px-10 md:pt-[5.5rem] md:pb-28 gallery:px-20">
         {hasIntro ? (
           <div className="mb-12 grid items-end gap-8 md:mb-16 md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.9fr)] md:gap-16">
             <div>
-              {block.eyebrow ? <p className="kicker">{block.eyebrow}</p> : null}
-              {block.heading ? <h2 className="dressing-title">{block.heading}</h2> : null}
+              {block.eyebrow ? (
+                <p className="mb-3.5 font-mono text-[10px] tracking-[0.19em] text-primary uppercase">
+                  {block.eyebrow}
+                </p>
+              ) : null}
+              {block.heading ? (
+                <h2 className="max-w-[8ch] font-display text-[clamp(4.4rem,11vw,8.4rem)] leading-[0.8] tracking-[-0.045em] text-ink">
+                  {firstWordCapital(block.heading)}
+                </h2>
+              ) : null}
             </div>
-            {block.body ? <p className="dressing-body md:mb-3">{block.body}</p> : null}
+            {block.body ? (
+              <p className="max-w-md text-[0.92rem] leading-[1.65] text-ink/78 md:mb-3">{block.body}</p>
+            ) : null}
           </div>
         ) : null}
 
-        <div className="dressing-collage">
+        <div className="grid min-h-[min(52vh,34rem)] grid-cols-[1.05fr_1fr_0.82fr] grid-rows-2 gap-[0.85rem] max-md:min-h-0 max-md:grid-cols-1 max-md:grid-rows-none">
           {featured.map((portrait, index) => (
             <PortraitFigure
               key={portrait.alt || index}
               portrait={portrait}
+              className={collagePlacement[index]}
               sizes={
                 index === 0
                   ? '(min-width: 768px) 38vw, 100vw'
@@ -72,12 +90,16 @@ export function PortraitGallery({
 function PortraitFigure({
   portrait,
   sizes,
+  className = '',
 }: {
   portrait: Portrait
   sizes: string
+  className?: string
 }) {
   return (
-    <figure>
+    <figure
+      className={`relative h-full min-h-0 overflow-hidden bg-[color-mix(in_srgb,var(--secondary)_35%,var(--canvas))] max-md:h-auto ${className}`}
+    >
       <SanityImage
         image={portrait}
         alt={portrait.alt || 'Carousel portrait'}
@@ -87,10 +109,22 @@ function PortraitFigure({
         className="object-cover"
       />
       {portrait.caption ? (
-        <figcaption className="dressing-caption">{portrait.caption}</figcaption>
+        <figcaption className="absolute bottom-[0.7rem] left-3 font-mono text-[0.55rem] tracking-[0.2em] text-canvas/92 uppercase">
+          {portrait.caption}
+        </figcaption>
       ) : null}
     </figure>
   )
+}
+
+function firstWordCapital(value: string) {
+  const [first, ...rest] = value.trim().split(/\s+/)
+  if (!first) return value
+
+  return [
+    first.charAt(0).toUpperCase() + first.slice(1).toLowerCase(),
+    ...rest.map((word) => word.toLowerCase()),
+  ].join(' ')
 }
 
 function AccentedText({text, accent}: {text: string; accent?: string | null}) {
@@ -105,7 +139,7 @@ function AccentedText({text, accent}: {text: string; accent?: string | null}) {
   return (
     <>
       {before}
-      <em className="statement-accent">{match}</em>
+      <em className="font-script font-normal text-primary italic">{match}</em>
       {after}
     </>
   )

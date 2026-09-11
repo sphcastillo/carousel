@@ -9,20 +9,23 @@ export default function CartPage() {
   const checkout = getCheckoutAction()
 
   return (
-    <div className="vanity-page min-h-[80vh] px-4 py-20 md:px-8">
+    <div className="min-h-[80vh] bg-[radial-gradient(circle_at_12%_0%,color-mix(in_srgb,var(--secondary)_45%,transparent),transparent_34%),var(--canvas)] px-4 py-20 md:px-8">
       <div className="mx-auto max-w-6xl">
-        <p className="kicker">01 / Your bag</p>
-        <h1 className="display text-6xl md:text-8xl">The Cart</h1>
-        <div className="hairline mt-8 max-w-xs" />
+        <p className="mb-3.5 font-mono text-[10px] tracking-[0.19em] text-primary uppercase">01 / Your bag</p>
+        <h1 className="font-display text-6xl leading-[0.78] tracking-[-0.04em] md:text-8xl">The Cart</h1>
+        <div className="mt-8 h-px max-w-xs bg-primary/22" />
 
         {lines.length === 0 ? (
-          <div className="perfume-card mt-16 max-w-lg">
-            <p className="kicker">Empty</p>
-            <p className="display text-5xl">Nothing here yet.</p>
+          <div className="mt-16 max-w-lg border border-primary/18 bg-surface p-[1.6rem]">
+            <p className="mb-3.5 font-mono text-[10px] tracking-[0.19em] text-primary uppercase">Empty</p>
+            <p className="font-display text-5xl leading-[0.78] tracking-[-0.04em]">Nothing here yet.</p>
             <p className="mt-4 text-sm leading-relaxed text-ink/70">
               Your vanity is waiting for a little extra length.
             </p>
-            <Link href="/shop" className="btn-round mt-8">
+            <Link
+              href="/shop"
+              className="mt-8 inline-flex items-center justify-center rounded-full border border-primary px-[1.35rem] py-[0.85rem] font-mono text-[10px] tracking-[0.19em] text-primary uppercase transition hover:bg-primary hover:text-canvas"
+            >
               Wander the boutique
             </Link>
           </div>
@@ -34,7 +37,7 @@ export default function CartPage() {
                   key={line.id}
                   className="grid grid-cols-[7.5rem_1fr] gap-4 border border-primary/15 bg-surface p-4 md:grid-cols-[9rem_1fr]"
                 >
-                  <div className="photo-figure">
+                  <div className="border border-primary/18 bg-surface p-[0.55rem] pb-[0.7rem]">
                     {line.imageUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -86,9 +89,9 @@ export default function CartPage() {
                 </li>
               ))}
             </ul>
-            <aside className="perfume-card h-fit">
-              <p className="kicker">Summary</p>
-              <p className="display text-4xl">A little restraint.</p>
+            <aside className="h-fit border border-primary/18 bg-surface p-[1.6rem]">
+              <p className="mb-3.5 font-mono text-[10px] tracking-[0.19em] text-primary uppercase">Summary</p>
+              <p className="font-display text-4xl leading-[0.78] tracking-[-0.04em]">A little restraint.</p>
               <div className="mt-6 flex items-center justify-between text-sm">
                 <span>Subtotal</span>
                 <span className="font-display text-3xl">{formatMoney(subtotal)}</span>
@@ -96,7 +99,10 @@ export default function CartPage() {
               <p className="mt-4 text-sm leading-relaxed text-ink/60">
                 Shopify checkout is waiting in the wings. For now, send the studio your bag.
               </p>
-              <Link href={checkout.href} className="btn-fill mt-6 w-full">
+              <Link
+                href={checkout.href}
+                className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-primary px-[1.4rem] py-4 font-mono text-[0.7rem] tracking-[0.18em] text-canvas uppercase"
+              >
                 {checkout.label}
               </Link>
               <p className="mt-4 text-center font-mono text-[10px] tracking-[0.18em] uppercase text-ink/40">

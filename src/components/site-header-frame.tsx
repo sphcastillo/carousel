@@ -66,8 +66,8 @@ export function SiteHeaderFrame({data}: {data: HeaderData}) {
       <div
         className={
           overlay
-            ? 'pointer-events-auto relative flex items-start justify-between px-5 py-6 md:px-10 md:py-8 lg:px-12'
-            : 'relative flex items-center justify-between px-5 py-6 md:px-10 md:py-8 lg:px-12'
+            ? 'pointer-events-auto relative flex items-start justify-between px-5 py-3 md:px-10 md:py-3.5 lg:px-12'
+            : 'relative flex items-center justify-between px-5 py-2.5 md:px-10 md:py-3 lg:px-12'
         }
       >
         <WordmarkLink inverted />

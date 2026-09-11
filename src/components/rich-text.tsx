@@ -4,7 +4,7 @@ const components: PortableTextComponents = {
   block: {
     normal: ({children}) => <p className="mb-4 text-pretty leading-relaxed">{children}</p>,
     h2: ({children}) => (
-      <h2 className="display mb-4 text-3xl text-ink">{children}</h2>
+      <h2 className="mb-4 font-display text-3xl leading-[0.78] tracking-[-0.04em] text-ink">{children}</h2>
     ),
     h3: ({children}) => (
       <h3 className="font-display mb-3 text-2xl tracking-tight text-ink">{children}</h3>

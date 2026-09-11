@@ -34,14 +34,18 @@ export function EditorialSplit({
   if (!hasIntro && !hasPanel && !image?.asset) return null
 
   return (
-    <section className="editorial-split">
-      <div className="editorial-split-inner">
+    <section className="bg-[color-mix(in_srgb,var(--ink)_68%,var(--primary))] px-5 pt-[4.25rem] pb-[4.75rem] md:px-12 md:pt-[5.5rem] md:pb-24">
+      <div className="mx-auto max-w-[92rem]">
         {hasIntro ? (
-          <div className="editorial-split-intro">
+          <div className="mb-[2.35rem] grid gap-7 md:mb-[2.85rem] md:grid-cols-[minmax(0,1.15fr)_minmax(16rem,0.7fr)] md:items-start md:gap-12">
             <div>
-              {block.eyebrow ? <p className="editorial-split-kicker">{block.eyebrow}</p> : null}
+              {block.eyebrow ? (
+                <p className="mb-[1.15rem] font-mono text-[0.6rem] tracking-[0.22em] text-canvas/72 uppercase">
+                  {block.eyebrow}
+                </p>
+              ) : null}
               {block.heading ? (
-                <h2 className="editorial-split-title">
+                <h2 className="max-w-[14ch] font-display text-[clamp(3.8rem,9.4vw,7.4rem)] leading-[0.86] tracking-[-0.045em] text-canvas">
                   {block.heading}
                   {block.headingLine ? (
                     <>
@@ -52,36 +56,46 @@ export function EditorialSplit({
                 </h2>
               ) : null}
             </div>
-            {block.body ? <p className="editorial-split-body">{block.body}</p> : null}
+            {block.body ? (
+              <p className="max-w-[18.5rem] text-[0.88rem] leading-[1.6] text-canvas/78 md:mt-[2.6rem] md:justify-self-end">
+                {block.body}
+              </p>
+            ) : null}
           </div>
         ) : null}
 
         {hasPanel || image?.asset ? (
-          <div className="editorial-shopfront">
-            <div className="editorial-chrome">
+          <div className="overflow-hidden bg-secondary">
+            <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 bg-canvas px-[1.15rem] py-[0.72rem] font-mono text-[0.56rem] tracking-[0.2em] text-ink/78 uppercase">
               <span>{block.chromeLeft}</span>
-              <span className="editorial-chrome-mark">Carousel</span>
-              <span>{block.chromeRight}</span>
+              <span className="font-display text-[1.35rem] tracking-[-0.03em] text-ink normal-case">
+                Carousel
+              </span>
+              <span className="justify-self-end text-right">{block.chromeRight}</span>
             </div>
-            <div className="editorial-stage">
+            <div className="grid min-h-[min(88vh,54rem)] md:grid-cols-[minmax(17rem,0.4fr)_minmax(0,0.6fr)]">
               {hasPanel ? (
-                <div className="editorial-panel">
+                <div className="flex min-h-128 flex-col justify-between bg-secondary px-[1.6rem] pt-[2.6rem] pb-[2.35rem] text-ink md:min-h-0 md:px-[2.4rem] md:pt-[3.1rem] md:pb-[2.7rem]">
                   <div>
                     {block.panelEyebrow ? (
-                      <p className="editorial-panel-kicker">{block.panelEyebrow}</p>
+                      <p className="mb-4 font-mono text-[0.58rem] tracking-[0.2em] text-ink/62 uppercase">
+                        {block.panelEyebrow}
+                      </p>
                     ) : null}
                     {block.panelHeadline ? (
-                      <h3 className="editorial-panel-title">{block.panelHeadline}</h3>
+                      <h3 className="max-w-[8ch] font-display text-[clamp(3.4rem,7.4vw,6.4rem)] leading-[0.84] tracking-[-0.045em]">
+                        {block.panelHeadline}
+                      </h3>
                     ) : null}
                   </div>
-                  <div className="editorial-panel-foot">
+                  <div className="max-w-[16.5rem] pt-[4.5rem]">
                     {block.panelSubcopy ? (
-                      <p className="editorial-panel-sub">{block.panelSubcopy}</p>
+                      <p className="mb-6 text-[0.86rem] leading-[1.55] text-ink/78">{block.panelSubcopy}</p>
                     ) : null}
                     {href && block.cta?.label ? (
                       <Link
                         href={href}
-                        className="enter-orb"
+                        className="grid size-[8.6rem] place-items-center rounded-full border border-ink text-center font-mono text-[0.62rem] leading-[1.35] tracking-[0.16em] text-ink uppercase transition hover:bg-ink hover:text-canvas"
                         target={block.cta.linkType === 'external' ? '_blank' : undefined}
                         rel={block.cta.linkType === 'external' ? 'noreferrer' : undefined}
                       >
@@ -92,7 +106,7 @@ export function EditorialSplit({
                 </div>
               ) : null}
               {image?.asset ? (
-                <div className="editorial-photo">
+                <div className="relative min-h-112 bg-[color-mix(in_srgb,var(--ink)_18%,var(--secondary))] md:min-h-0">
                   <SanityImage
                     image={block.image}
                     alt={block.panelHeadline || block.heading || 'Carousel campaign'}

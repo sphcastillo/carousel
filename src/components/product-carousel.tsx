@@ -16,12 +16,16 @@ export function ProductCarousel({
   return (
     <section className="border-t border-primary/10 py-20 md:py-24">
       <div className="mx-auto max-w-6xl px-4 md:px-8">
-        {eyebrow ? <p className="kicker">{eyebrow}</p> : null}
+        {eyebrow ? (
+          <p className="mb-3.5 font-mono text-[10px] tracking-[0.19em] text-primary uppercase">{eyebrow}</p>
+        ) : null}
         {heading ? (
-          <h2 className="display mb-10 max-w-2xl text-5xl md:text-7xl">{heading}</h2>
+          <h2 className="mb-10 max-w-2xl font-display text-5xl leading-[0.78] tracking-[-0.04em] md:text-7xl">
+            {heading}
+          </h2>
         ) : null}
       </div>
-      <div className="carousel-track">
+      <div className="flex gap-5 overflow-x-auto px-4 pb-4 snap-x snap-mandatory md:px-8">
         {items.map((product) => (
           <div key={product._id} className="min-w-[78%] snap-start sm:min-w-[46%] lg:min-w-[30%]">
             <ProductCard product={product} />

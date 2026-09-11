@@ -19,11 +19,16 @@ export function TestimonialsBlock({
   return (
     <section className="py-24">
       <div className="mx-auto max-w-6xl px-4 md:px-8">
-        {heading ? <h2 className="display mb-12 text-5xl md:text-7xl">{heading}</h2> : null}
+        {heading ? (
+          <h2 className="mb-12 font-display text-5xl leading-[0.78] tracking-[-0.04em] md:text-7xl">{heading}</h2>
+        ) : null}
         <div className="grid gap-5 md:grid-cols-3">
-          {items.map((item) =>
+          {items.map((item, index) =>
             item ? (
-              <blockquote key={item._id} className="testimonial-card">
+              <blockquote
+                key={item._id}
+                className={`border border-primary/14 p-[1.6rem] ${index === 1 ? 'bg-secondary' : 'bg-surface'}`}
+              >
                 <p className="font-display text-3xl leading-[1.05] text-ink">“{item.quote}”</p>
                 <div className="mt-8 flex items-center gap-3">
                   {item.photo ? (

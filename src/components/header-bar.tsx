@@ -30,13 +30,7 @@ export function HeaderBar({
 
   return (
     <>
-      <nav
-        className={
-          compact
-            ? 'absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-8 md:flex'
-            : 'absolute top-8 left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex lg:top-9'
-        }
-      >
+      <nav className="absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-8 md:flex">
         <NavLinks navigation={navigation} instagramUrl={instagramUrl} className={linkClass} />
       </nav>
 
@@ -50,7 +44,7 @@ export function HeaderBar({
         <div className="md:hidden">
           <button
             type="button"
-            className="btn-round border-canvas/55 px-3 py-1 text-canvas hover:bg-canvas hover:text-ink"
+            className="inline-flex items-center justify-center rounded-full border border-canvas/55 px-3 py-1 font-mono text-[10px] tracking-[0.19em] text-canvas uppercase transition hover:bg-canvas hover:text-ink"
             onClick={() => setOpen((value) => !value)}
           >
             Menu

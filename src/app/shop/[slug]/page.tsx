@@ -46,14 +46,14 @@ export default async function ProductPage({
   return (
     <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-2 md:px-8">
       <div className="space-y-4">
-        <div className="photo-figure">
+        <div className="border border-primary/18 bg-surface p-[0.55rem] pb-[0.7rem]">
           <div className="relative aspect-[4/5] overflow-hidden bg-secondary/30">
             <SanityImage image={hero} fill className="object-cover" sizes="50vw" priority />
           </div>
         </div>
         <div className="grid grid-cols-4 gap-3">
           {(data.gallery || []).slice(1, 5).map((image, index) => (
-            <div key={index} className="photo-figure">
+            <div key={index} className="border border-primary/18 bg-surface p-[0.55rem] pb-[0.7rem]">
               <div className="relative aspect-square overflow-hidden">
                 <SanityImage image={image} fill className="object-cover" sizes="15vw" />
               </div>
@@ -62,8 +62,8 @@ export default async function ProductPage({
         </div>
       </div>
       <div>
-        <p className="kicker">01 / Length</p>
-        <h1 className="display text-5xl md:text-7xl">{data.name}</h1>
+        <p className="mb-3.5 font-mono text-[10px] tracking-[0.19em] text-primary uppercase">01 / Length</p>
+        <h1 className="font-display text-5xl leading-[0.78] tracking-[-0.04em] md:text-7xl">{data.name}</h1>
         {data.shortPitch ? <p className="mt-5 max-w-md text-sm leading-relaxed text-ink/70">{data.shortPitch}</p> : null}
         <ProductPurchase
           productId={data._id}

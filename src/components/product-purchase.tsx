@@ -89,7 +89,7 @@ export function ProductPurchase({
             shopifyVariantId: selected.shopifyVariantId || undefined,
           })
         }
-        className="btn-fill w-full disabled:cursor-not-allowed disabled:opacity-50"
+        className="inline-flex w-full items-center justify-center rounded-full bg-primary px-[1.4rem] py-4 font-mono text-[0.7rem] tracking-[0.18em] text-canvas uppercase disabled:cursor-not-allowed disabled:opacity-50"
       >
         {selected.inStock === false ? 'Currently restocking' : `Add ${selected.length}" to cart`}
       </button>

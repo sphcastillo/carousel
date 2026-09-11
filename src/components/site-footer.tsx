@@ -17,14 +17,14 @@ export async function SiteFooter() {
           </p>
         </div>
         <div>
-          <p className="kicker">Visit</p>
+          <p className="mb-3.5 font-mono text-[10px] tracking-[0.19em] text-primary uppercase">Visit</p>
           <p className="whitespace-pre-line text-sm leading-relaxed text-ink/75">
             {data?.address || 'By appointment, Miami'}
           </p>
           <p className="mt-3 whitespace-pre-line text-sm text-ink/75">{data?.hours}</p>
         </div>
         <div>
-          <p className="kicker">Say hello</p>
+          <p className="mb-3.5 font-mono text-[10px] tracking-[0.19em] text-primary uppercase">Say hello</p>
           {data?.email ? (
             <p>
               <a className="text-sm underline decoration-primary/40" href={`mailto:${data.email}`}>

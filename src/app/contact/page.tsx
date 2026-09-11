@@ -20,15 +20,19 @@ export default async function ContactPage() {
   return (
     <div className="mx-auto grid max-w-6xl gap-12 px-4 py-20 md:grid-cols-[1.1fr_0.9fr] md:px-8">
       <div>
-        <p className="kicker">{page?.eyebrow || 'A note from the studio'}</p>
-        <h1 className="display text-6xl md:text-8xl">{page?.headline || page?.title || 'Contact'}</h1>
+        <p className="mb-3.5 font-mono text-[10px] tracking-[0.19em] text-primary uppercase">
+          {page?.eyebrow || 'A note from the studio'}
+        </p>
+        <h1 className="font-display text-6xl leading-[0.78] tracking-[-0.04em] md:text-8xl">
+          {page?.headline || page?.title || 'Contact'}
+        </h1>
         {page?.intro ? <p className="mt-6 max-w-xl text-sm leading-relaxed text-ink/70">{page.intro}</p> : null}
         <div className="mt-8 max-w-xl">
           <RichText value={page?.note} />
         </div>
       </div>
-      <aside className="perfume-card h-fit">
-        <p className="kicker">Studio details</p>
+      <aside className="h-fit border border-primary/18 bg-surface p-[1.6rem]">
+        <p className="mb-3.5 font-mono text-[10px] tracking-[0.19em] text-primary uppercase">Studio details</p>
         <p className="font-display text-3xl">Take up space.</p>
         <dl className="mt-6 space-y-4 text-sm leading-relaxed">
           {settings?.email ? (
@@ -59,7 +63,10 @@ export default async function ContactPage() {
           ) : null}
         </dl>
         {settings?.email ? (
-          <a href={`mailto:${settings.email}`} className="btn-round mt-8 inline-flex">
+          <a
+            href={`mailto:${settings.email}`}
+            className="mt-8 inline-flex items-center justify-center rounded-full border border-primary px-[1.35rem] py-[0.85rem] font-mono text-[10px] tracking-[0.19em] text-primary uppercase transition hover:bg-primary hover:text-canvas"
+          >
             Write the studio
           </a>
         ) : null}

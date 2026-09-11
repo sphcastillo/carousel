@@ -29,7 +29,7 @@ export function ProductCard({product}: {product: ProductCardProduct}) {
   return (
     <Link href={product.slug ? `/shop/${product.slug}` : '/shop'} className="group block">
       <article>
-        <div className="photo-figure">
+        <div className="border border-primary/18 bg-surface p-[0.55rem] pb-[0.7rem]">
           <div className="relative aspect-[4/5] overflow-hidden bg-secondary/30">
             <SanityImage
               image={product.gallery}
@@ -40,7 +40,10 @@ export function ProductCard({product}: {product: ProductCardProduct}) {
             />
             <div className="absolute left-3 top-3 flex gap-1">
               {lengths.map((length) => (
-                <span key={length} className="length-pill">
+                <span
+                  key={length}
+                  className="rounded-full border border-canvas/70 bg-canvas/88 px-[0.55rem] py-[0.2rem] font-mono text-[0.58rem] tracking-[0.16em] uppercase"
+                >
                   {length}&quot;
                 </span>
               ))}

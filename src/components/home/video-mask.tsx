@@ -41,12 +41,17 @@ export function VideoMaskScroll({
   return (
     <section className="bg-ink text-canvas">
       <div className="mx-auto max-w-6xl px-4 py-16 md:px-8">
-        <p className="kicker text-secondary">Scroll to enter</p>
-        {heading ? <h2 className="display text-5xl md:text-7xl">{heading}</h2> : null}
+        <p className="mb-3.5 font-mono text-[10px] tracking-[0.19em] text-secondary uppercase">Scroll to enter</p>
+        {heading ? (
+          <h2 className="font-display text-5xl leading-[0.78] tracking-[-0.04em] md:text-7xl">{heading}</h2>
+        ) : null}
         {subcopy ? <p className="mt-5 max-w-xl text-sm leading-relaxed text-canvas/70">{subcopy}</p> : null}
       </div>
       <div ref={containerRef} className="relative h-[280vh]">
-        <div ref={maskRef} className="video-mask sticky top-0 h-screen w-full overflow-hidden">
+        <div
+          ref={maskRef}
+          className="sticky top-0 h-screen w-full overflow-hidden [mask-image:url('/masks/bloom.svg')] [mask-repeat:no-repeat] [mask-position:center] [mask-size:55%] [-webkit-mask-image:url('/masks/bloom.svg')] [-webkit-mask-repeat:no-repeat] [-webkit-mask-position:center] [-webkit-mask-size:55%]"
+        >
           {parsed.kind === 'file' ? (
             <video
               className="h-full w-full object-cover"
