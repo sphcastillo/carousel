@@ -35,7 +35,7 @@ export function HeroBlock({
           sizes="100vw"
           quality={90}
           srcWidth={3840}
-          className="object-cover"
+          className="object-cover object-[67%_center] sm:object-center"
         />
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(55,7,16,0.61),rgba(55,7,16,0.04)_63%,rgba(30,3,7,0.22))]" />
       </div>
