@@ -15,11 +15,9 @@ type NavItem = {
 
 export function HeaderBar({
   navigation,
-  instagramUrl,
   compact = false,
 }: {
   navigation: NavItem[]
-  instagramUrl?: string | null
   compact?: boolean
 }) {
   const {itemCount} = useCart()
@@ -31,7 +29,7 @@ export function HeaderBar({
   return (
     <>
       <nav className="absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-8 md:flex">
-        <NavLinks navigation={navigation} instagramUrl={instagramUrl} className={linkClass} />
+        <NavLinks navigation={navigation} className={linkClass} />
       </nav>
 
       <div className="flex items-center gap-3">
@@ -63,7 +61,6 @@ export function HeaderBar({
           <nav className="flex flex-col gap-4">
             <NavLinks
               navigation={navigation}
-              instagramUrl={instagramUrl}
               className="font-display text-3xl text-canvas"
               onClick={() => setOpen(false)}
             />
@@ -76,12 +73,10 @@ export function HeaderBar({
 
 function NavLinks({
   navigation,
-  instagramUrl,
   className,
   onClick,
 }: {
   navigation: NavItem[]
-  instagramUrl?: string | null
   className: string
   onClick?: () => void
 }) {
@@ -90,6 +85,7 @@ function NavLinks({
       {navigation.map((item) => {
         const href = resolveHref(item)
         if (!href || !item.label) return null
+        if (item.label.trim().toLowerCase() === 'instagram') return null
         const external = item.linkType === 'external'
         return (
           <Link
@@ -104,17 +100,6 @@ function NavLinks({
           </Link>
         )
       })}
-      {instagramUrl ? (
-        <Link
-          href={instagramUrl}
-          target="_blank"
-          rel="noreferrer"
-          className={className}
-          onClick={onClick}
-        >
-          Instagram
-        </Link>
-      ) : null}
     </>
   )
 }

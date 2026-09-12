@@ -34,8 +34,8 @@ export function EditorialSplit({
   if (!hasIntro && !hasPanel && !image?.asset) return null
 
   return (
-    <section className="bg-[color-mix(in_srgb,var(--ink)_68%,var(--primary))] px-5 pt-[4.25rem] pb-[4.75rem] md:px-12 md:pt-[5.5rem] md:pb-24">
-      <div className="mx-auto max-w-[92rem]">
+    <section className="bg-[color-mix(in_srgb,var(--ink)_68%,var(--primary))] px-5 pt-17 pb-19 md:px-12 md:pt-22 md:pb-24">
+      <div className="mx-auto max-w-6xl">
         {hasIntro ? (
           <div className="mb-[2.35rem] grid gap-7 md:mb-[2.85rem] md:grid-cols-[minmax(0,1.15fr)_minmax(16rem,0.7fr)] md:items-start md:gap-12">
             <div>
@@ -57,7 +57,7 @@ export function EditorialSplit({
               ) : null}
             </div>
             {block.body ? (
-              <p className="max-w-[18.5rem] text-[0.88rem] leading-[1.6] text-canvas/78 md:mt-[2.6rem] md:justify-self-end">
+              <p className="max-w-74 text-[0.88rem] leading-[1.6] text-canvas/78 md:mt-[2.6rem] md:justify-self-end">
                 {block.body}
               </p>
             ) : null}
@@ -66,13 +66,7 @@ export function EditorialSplit({
 
         {hasPanel || image?.asset ? (
           <div className="overflow-hidden bg-secondary">
-            <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 bg-canvas px-[1.15rem] py-[0.72rem] font-mono text-[0.56rem] tracking-[0.2em] text-ink/78 uppercase">
-              <span>{block.chromeLeft}</span>
-              <span className="font-display text-[1.35rem] tracking-[-0.03em] text-ink normal-case">
-                Carousel
-              </span>
-              <span className="justify-self-end text-right">{block.chromeRight}</span>
-            </div>
+
             <div className="grid min-h-[min(88vh,54rem)] md:grid-cols-[minmax(17rem,0.4fr)_minmax(0,0.6fr)]">
               {hasPanel ? (
                 <div className="flex min-h-128 flex-col justify-between bg-secondary px-[1.6rem] pt-[2.6rem] pb-[2.35rem] text-ink md:min-h-0 md:px-[2.4rem] md:pt-[3.1rem] md:pb-[2.7rem]">
@@ -88,7 +82,7 @@ export function EditorialSplit({
                       </h3>
                     ) : null}
                   </div>
-                  <div className="max-w-[16.5rem] pt-[4.5rem]">
+                  <div className="max-w-66 pt-18">
                     {block.panelSubcopy ? (
                       <p className="mb-6 text-[0.86rem] leading-[1.55] text-ink/78">{block.panelSubcopy}</p>
                     ) : null}

@@ -73,6 +73,49 @@ export const productCarouselType = defineType({
   },
 })
 
+export const personalCurationType = defineType({
+  name: 'personalCuration',
+  title: 'Personal curation',
+  type: 'object',
+  icon: BlockElementIcon,
+  fields: [
+    defineField({
+      name: 'eyebrow',
+      title: 'Eyebrow',
+      type: 'string',
+      description: 'Small kicker above the heading, e.g. “The Carousel Signature”.',
+    }),
+    defineField({
+      name: 'heading',
+      title: 'Heading',
+      type: 'string',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'headingLine',
+      title: 'Heading second line',
+      type: 'string',
+    }),
+    defineField({
+      name: 'body',
+      title: 'Body',
+      type: 'text',
+      rows: 4,
+    }),
+    defineField({
+      name: 'image',
+      type: 'altImage',
+      validation: (rule) => rule.required(),
+    }),
+  ],
+  preview: {
+    select: {title: 'heading', subtitle: 'eyebrow', media: 'image'},
+    prepare({title, subtitle, media}) {
+      return {title: title || 'Personal curation', subtitle: subtitle || 'Personal curation', media}
+    },
+  },
+})
+
 export const testimonialsBlockType = defineType({
   name: 'testimonialsBlock',
   title: 'Testimonials',
@@ -110,7 +153,7 @@ export const featuredInType = defineType({
   preview: {
     select: {title: 'heading'},
     prepare({title}) {
-      return {title: title || 'Featured in', subtitle: 'Press marquee'}
+      return {title: title || 'Featured in', subtitle: 'Press bar'}
     },
   },
 })
@@ -149,7 +192,18 @@ export const instagramStripType = defineType({
   type: 'object',
   icon: BlockElementIcon,
   fields: [
+    defineField({
+      name: 'eyebrow',
+      type: 'string',
+      description: 'Small kicker above the heading, e.g. “Follow the feeling”.',
+    }),
     defineField({name: 'heading', type: 'string'}),
+    defineField({
+      name: 'body',
+      type: 'text',
+      rows: 3,
+      description: 'Quiet copy opposite the heading.',
+    }),
     defineField({
       name: 'posts',
       type: 'array',
@@ -158,13 +212,41 @@ export const instagramStripType = defineType({
     defineField({
       name: 'ctaLabel',
       type: 'string',
-      initialValue: 'Follow along',
+      initialValue: 'Open Instagram',
     }),
   ],
   preview: {
     select: {title: 'heading'},
     prepare({title}) {
       return {title: title || 'Instagram', subtitle: 'Instagram strip'}
+    },
+  },
+})
+
+export const brandStatementType = defineType({
+  name: 'brandStatement',
+  title: 'Brand statement',
+  type: 'object',
+  icon: BlockElementIcon,
+  fields: [
+    defineField({
+      name: 'statement',
+      title: 'Statement',
+      type: 'text',
+      rows: 3,
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'statementAccent',
+      title: 'Statement accent',
+      type: 'string',
+      description: 'Italic burgundy phrase inside the statement.',
+    }),
+  ],
+  preview: {
+    select: {title: 'statement'},
+    prepare({title}) {
+      return {title: title || 'Brand statement', subtitle: 'Brand statement'}
     },
   },
 })
@@ -179,21 +261,6 @@ export const portraitGalleryType = defineType({
     {name: 'photos', title: 'Photographs'},
   ],
   fields: [
-    defineField({
-      name: 'statement',
-      title: 'Statement',
-      type: 'text',
-      rows: 3,
-      group: 'copy',
-      description: 'Ice-blue band above the photographs.',
-    }),
-    defineField({
-      name: 'statementAccent',
-      title: 'Statement accent',
-      type: 'string',
-      group: 'copy',
-      description: 'Italic burgundy phrase inside the statement.',
-    }),
     defineField({
       name: 'eyebrow',
       title: 'Eyebrow',

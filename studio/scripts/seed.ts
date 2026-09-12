@@ -198,6 +198,7 @@ async function run() {
         _type: 'productVariant',
         _key: key(),
         length,
+        hairType: 'remy',
         price: length === '20' ? seed.price + 18 : seed.price,
         compareAtPrice: seed.compare,
         sku: `CHE-${slugify(seed.name).slice(0, 8)}-${length}`,
@@ -273,13 +274,13 @@ async function run() {
 
   const existingPress = await client.fetch<Array<{_id: string}>>(`*[_type == "pressFeature"]{_id}`)
   const press =
-    existingPress.length >= 5
+    existingPress.length >= 3
       ? existingPress
       : await Promise.all(
-    ['Gloss Weekly', 'Crown Magazine', 'Ribbon & Rouge', 'Vanity Hour', 'Petal Press'].map((publication) =>
-      client.create({_type: 'pressFeature', publication}),
-    ),
-  )
+          ['LA Weekly', 'The Village Voice', 'Irvine Weekly'].map((publication) =>
+            client.create({_type: 'pressFeature', publication}),
+          ),
+        )
 
   console.log('Uploading portraits and Instagram stills...')
   const portraits = []
@@ -361,11 +362,21 @@ async function run() {
         image: heroImage,
       },
       {
-        _type: 'portraitGallery',
+        _type: 'brandStatement',
         _key: key(),
         statement:
           'A beauty identity with the nerve to be romantic — heirloom sweetness punctuated by a rich theatrical red.',
         statementAccent: 'the nerve to be romantic',
+      },
+      {
+        _type: 'featuredIn',
+        _key: key(),
+        heading: 'As seen on',
+        features: press.map((item) => ({_type: 'reference', _key: key(), _ref: item._id})),
+      },
+      {
+        _type: 'portraitGallery',
+        _key: key(),
         eyebrow: '01 / Image world',
         heading: 'The dressing room',
         body: 'The photography belongs to one spirited private universe: boudoir light, decadent texture, flirty colour, and an intimate point of view. Let the sets carry the romance; typography arrives quietly and never competes.',
@@ -398,10 +409,13 @@ async function run() {
         collection: {_type: 'reference', _ref: bestCollection._id},
       },
       {
-        _type: 'featuredIn',
+        _type: 'personalCuration',
         _key: key(),
-        heading: 'Where the extensions have been seen',
-        features: press.map((item) => ({_type: 'reference', _key: key(), _ref: item._id})),
+        eyebrow: 'The Carousel Signature',
+        heading: 'Not a look.',
+        headingLine: 'A scene.',
+        body: 'Velvet curtains bring the drama, tulle and powder-blue rooms turn it tender. The visual language is expressive but never noisy: a keepsake theatre for hair that wants its own spotlight.',
+        image: portraits[3] || portraits[0],
       },
       {
         _type: 'videoMoment',
@@ -427,8 +441,10 @@ async function run() {
       {
         _type: 'instagramStrip',
         _key: key(),
-        heading: 'On the carousel feed',
-        ctaLabel: 'Follow along',
+        eyebrow: 'Follow the feeling',
+        heading: 'Come backstage',
+        body: 'Snapshots, set lists, and the occasional grand entrance. Tag your transformation for a chance to take center stage.',
+        ctaLabel: 'Open Instagram',
         posts: instagramPosts.map((item) => ({_type: 'reference', _key: key(), _ref: item._id})),
       },
     ],

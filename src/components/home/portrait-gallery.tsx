@@ -17,8 +17,6 @@ export function PortraitGallery({
   block,
 }: {
   block: {
-    statement?: string | null
-    statementAccent?: string | null
     eyebrow?: string | null
     heading?: string | null
     body?: string | null
@@ -34,29 +32,18 @@ export function PortraitGallery({
   const hasIntro = Boolean(block.eyebrow || block.heading || block.body)
 
   return (
-    <>
-      {block.statement ? (
-        <section className="bg-[color-mix(in_srgb,var(--accent)_78%,white)] px-5 py-[2.75rem] md:px-12 md:py-[4.5rem]">
-          <div className="mx-auto max-w-[86rem] border border-ink/18 px-7 py-[3.25rem] md:px-[6.5rem] md:py-[5.5rem]">
-            <p className="max-w-[14.5em] font-display text-[clamp(2.05rem,4.2vw,3.35rem)] leading-[1.18] tracking-[-0.03em] text-ink">
-              <AccentedText text={block.statement} accent={block.statementAccent} />
-            </p>
-          </div>
-        </section>
-      ) : null}
-
-      <section className="mx-auto max-w-368 px-5 pt-[4.5rem] pb-[5.5rem] md:px-10 md:pt-[5.5rem] md:pb-28 gallery:px-20">
+    <section className="mx-auto max-w-7xl px-5 pt-18 pb-22 md:px-10 md:pt-22 md:pb-28 gallery:px-20 lg:px-24">
         {hasIntro ? (
           <div className="mb-12 grid items-end gap-8 md:mb-16 md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.9fr)] md:gap-16">
             <div>
               {block.eyebrow ? (
-                <p className="mb-3.5 font-mono text-[10px] tracking-[0.19em] text-primary uppercase">
+                <p className="mb-3.5 font-mono text-[10px] tracking-[0.19em] uppercase">
                   {block.eyebrow}
                 </p>
               ) : null}
               {block.heading ? (
-                <h2 className="max-w-[8ch] font-display text-[clamp(4.4rem,11vw,8.4rem)] leading-[0.8] tracking-[-0.045em] text-ink">
-                  {firstWordCapital(block.heading)}
+                <h2 className="font-display text-[clamp(4.4rem,11vw,8.4rem)] leading-[0.8] tracking-[-0.045em] text-ink">
+                  {headingLines(block.heading)}
                 </h2>
               ) : null}
             </div>
@@ -82,8 +69,7 @@ export function PortraitGallery({
             />
           ))}
         </div>
-      </section>
-    </>
+    </section>
   )
 }
 
@@ -117,6 +103,18 @@ function PortraitFigure({
   )
 }
 
+function headingLines(value: string) {
+  return firstWordCapital(value)
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((word, index) => (
+      <span key={`${word}-${index}`}>
+        {index > 0 ? <br /> : null}
+        {word}
+      </span>
+    ))
+}
+
 function firstWordCapital(value: string) {
   const [first, ...rest] = value.trim().split(/\s+/)
   if (!first) return value
@@ -125,22 +123,4 @@ function firstWordCapital(value: string) {
     first.charAt(0).toUpperCase() + first.slice(1).toLowerCase(),
     ...rest.map((word) => word.toLowerCase()),
   ].join(' ')
-}
-
-function AccentedText({text, accent}: {text: string; accent?: string | null}) {
-  if (!accent) return text
-  const index = text.toLowerCase().indexOf(accent.toLowerCase())
-  if (index < 0) return text
-
-  const before = text.slice(0, index)
-  const match = text.slice(index, index + accent.length)
-  const after = text.slice(index + accent.length)
-
-  return (
-    <>
-      {before}
-      <em className="font-script font-normal text-primary italic">{match}</em>
-      {after}
-    </>
-  )
 }

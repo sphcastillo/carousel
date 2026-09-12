@@ -23,6 +23,7 @@ const productCardProjection = /* groq */ `
   variants[]{
     _key,
     length,
+    hairType,
     price,
     compareAtPrice,
     sku,
@@ -66,6 +67,10 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
         image{${imageProjection}},
         cta
       },
+      _type == "brandStatement" => {
+        statement,
+        statementAccent
+      },
       _type == "portraitGallery" => {
         statement,
         statementAccent,
@@ -93,6 +98,9 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
           collection->products[]->{${productCardProjection}}
         )
       },
+      _type == "personalCuration" => {
+        image{${imageProjection}}
+      },
       _type == "testimonialsBlock" => {
         testimonials[]->{
           _id,
@@ -116,6 +124,8 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
       _type == "instagramStrip" => {
         posts[]->{
           _id,
+          kind,
+          label,
           caption,
           permalink,
           image{${imageProjection}}
@@ -181,6 +191,7 @@ export const PRODUCT_QUERY = defineQuery(/* groq */ `
     variants[]{
       _key,
       length,
+      hairType,
       price,
       compareAtPrice,
       sku,

@@ -1,4 +1,13 @@
+import Link from 'next/link'
 import {SanityImage} from '@/components/sanity-image'
+import {resolveHref} from '@/lib/links'
+
+type Cta = {
+  label?: string | null
+  linkType?: string | null
+  internalPath?: string | null
+  externalUrl?: string | null
+}
 
 export function HeroBlock({
   block,
@@ -9,9 +18,12 @@ export function HeroBlock({
     scriptAccent?: string | null
     subcopy?: string | null
     scrollCue?: string | null
+    cta?: Cta | null
     image?: unknown
   }
 }) {
+  const href = resolveHref(block.cta) || '/shop'
+  const label = block.cta?.label || 'Shop'
   return (
     <section id="home-hero" className="relative h-svh min-h-168 overflow-hidden">
       <div className="absolute inset-0">
@@ -45,10 +57,18 @@ export function HeroBlock({
             {block.headline ? <em className="italic">{block.headline}</em> : null}
           </h1>
           {block.subcopy ? (
-            <p className="mt-[1.6rem] max-w-[22rem] text-[0.92rem] leading-[1.55] text-canvas/82">
+            <p className="mt-[1.6rem] max-w-88 text-[0.92rem] leading-[1.55] text-canvas/82">
               {block.subcopy}
             </p>
           ) : null}
+          <Link
+            href={href}
+            className="mt-8 inline-flex items-center justify-center rounded-full border border-canvas/80 px-[1.45rem] py-[0.85rem] font-mono text-[10px] tracking-[0.2em] text-canvas uppercase transition hover:bg-canvas hover:text-ink"
+            target={block.cta?.linkType === 'external' ? '_blank' : undefined}
+            rel={block.cta?.linkType === 'external' ? 'noreferrer' : undefined}
+          >
+            {label}
+          </Link>
         </div>
       </div>
 

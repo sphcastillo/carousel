@@ -18,7 +18,6 @@ type HeaderData = {
   announcement?: string | null
   logo?: {asset?: unknown} | null
   navigation?: NavItem[] | null
-  instagramUrl?: string | null
 } | null
 
 export function SiteHeaderFrame({data}: {data: HeaderData}) {
@@ -32,23 +31,22 @@ export function SiteHeaderFrame({data}: {data: HeaderData}) {
       return
     }
 
-    setOverHero(true)
-
-    const hero = document.getElementById('home-hero')
-    if (!hero) {
-      setOverHero(true)
-      return
+    const update = () => {
+      const hero = document.getElementById('home-hero')
+      if (!hero) {
+        setOverHero(true)
+        return
+      }
+      setOverHero(hero.getBoundingClientRect().bottom > 96)
     }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setOverHero(entry.isIntersecting && entry.intersectionRatio > 0.28)
-      },
-      {threshold: [0.28, 0.5, 1]},
-    )
-
-    observer.observe(hero)
-    return () => observer.disconnect()
+    update()
+    window.addEventListener('scroll', update, {passive: true})
+    window.addEventListener('resize', update)
+    return () => {
+      window.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
   }, [onHome])
 
   const overlay = onHome && overHero
@@ -57,10 +55,10 @@ export function SiteHeaderFrame({data}: {data: HeaderData}) {
     <header
       className={
         overlay
-          ? 'pointer-events-none fixed inset-x-0 top-0 z-50'
+          ? 'pointer-events-none fixed inset-x-0 top-0 z-50 border-0 shadow-none'
           : onHome
-            ? 'fixed inset-x-0 top-0 z-50 bg-nav'
-            : 'sticky top-0 z-50 bg-nav'
+            ? 'fixed inset-x-0 top-0 z-50 border-0 bg-nav shadow-none'
+            : 'sticky top-0 z-50 border-0 bg-nav shadow-none'
       }
     >
       <div
@@ -71,11 +69,7 @@ export function SiteHeaderFrame({data}: {data: HeaderData}) {
         }
       >
         <WordmarkLink inverted />
-        <HeaderBar
-          navigation={data?.navigation || []}
-          instagramUrl={overlay ? undefined : data?.instagramUrl}
-          compact={!overlay}
-        />
+        <HeaderBar navigation={data?.navigation || []} compact={!overlay} />
       </div>
     </header>
   )

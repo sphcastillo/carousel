@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import {formatMoney, getCheckoutAction} from '@/lib/commerce'
+import {formatMoney, getCheckoutAction, HAIR_TYPE_LABELS} from '@/lib/commerce'
 import {useCart} from '@/components/cart-provider'
 
 export default function CartPage() {
@@ -55,7 +55,7 @@ export default function CartPage() {
                         {line.name}
                       </Link>
                       <p className="mt-1 font-mono text-[10px] tracking-[0.16em] uppercase text-ink/60">
-                        {line.length}&quot; set
+                        {line.length}&quot; · {HAIR_TYPE_LABELS[line.hairType]}
                       </p>
                     </div>
                     <div className="mt-4 flex flex-wrap items-center justify-between gap-3">

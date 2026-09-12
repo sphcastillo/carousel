@@ -29,20 +29,22 @@ export function ProductCard({product}: {product: ProductCardProduct}) {
   return (
     <Link href={product.slug ? `/shop/${product.slug}` : '/shop'} className="group block">
       <article>
-        <div className="border border-primary/18 bg-surface p-[0.55rem] pb-[0.7rem]">
-          <div className="relative aspect-[4/5] overflow-hidden bg-secondary/30">
+        <div className="border border-black bg-surface p-px">
+          <div className="relative aspect-3/4 overflow-hidden bg-canvas">
             <SanityImage
               image={product.gallery}
               alt={product.gallery?.alt || product.name || ''}
               fill
-              sizes="(min-width: 1024px) 25vw, 50vw"
+              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 92vw"
+              srcWidth={1600}
+              quality={90}
               className="object-cover transition duration-700 group-hover:scale-105"
             />
             <div className="absolute left-3 top-3 flex gap-1">
               {lengths.map((length) => (
                 <span
                   key={length}
-                  className="rounded-full border border-canvas/70 bg-canvas/88 px-[0.55rem] py-[0.2rem] font-mono text-[0.58rem] tracking-[0.16em] uppercase"
+                  className="rounded-full border border-black/70 bg-canvas/88 px-[0.55rem] py-[0.2rem] font-mono text-[0.58rem] tracking-[0.16em] text-black uppercase"
                 >
                   {length}&quot;
                 </span>
@@ -50,13 +52,17 @@ export function ProductCard({product}: {product: ProductCardProduct}) {
             </div>
           </div>
         </div>
-        <div className="mt-4 px-1">
-          <h3 className="font-display text-2xl text-ink">{product.name}</h3>
+        <div className="mt-4 px-1 text-black">
+          <h3 className="font-display text-[1.65rem] leading-[0.92] tracking-[-0.03em]">
+            {product.name}
+          </h3>
           {product.shortPitch ? (
-            <p className="mt-1 text-sm text-ink/65">{product.shortPitch}</p>
+            <p className="mt-1.5 font-sans text-[0.86rem] leading-[1.55] text-black/65">
+              {product.shortPitch}
+            </p>
           ) : null}
           {fromPrice != null ? (
-            <p className="mt-2 font-mono text-[10px] tracking-[0.16em] uppercase text-ink/70">
+            <p className="mt-2 font-mono text-[10px] tracking-[0.16em] text-black/70 uppercase">
               From {formatMoney(fromPrice)}
             </p>
           ) : null}

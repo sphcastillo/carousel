@@ -8,6 +8,7 @@
   --canvas: #f6eee6;
   --ink: #2a1216;
   --surface: #fbf6f0;
+  --gilt: #866a42;
 }
 
 @theme inline {
@@ -18,12 +19,14 @@
   --color-canvas: var(--canvas);
   --color-ink: var(--ink);
   --color-surface: var(--surface);
+  --color-gilt: var(--gilt);
   --font-sans: var(--font-manrope);
   --font-display: var(--font-italiana);
   --font-mono: var(--font-dm-mono);
   --font-script: var(--font-cormorant);
   --breakpoint-gallery: 925px;
   --animate-marquee: marquee 28s linear infinite;
+  --animate-product-marquee: marquee 110s linear infinite;
 }
 
 html,

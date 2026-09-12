@@ -14,7 +14,7 @@ import {
   type LengthOption,
 } from '@/lib/commerce'
 
-const STORAGE_KEY = 'carousel-cart-v1'
+const STORAGE_KEY = 'carousel-cart-v2'
 
 type CartContextValue = {
   lines: CartLine[]
@@ -53,7 +53,7 @@ export function CartProvider({children}: {children: React.ReactNode}) {
   }, [lines, ready])
 
   const addItem = useCallback((line: Omit<CartLine, 'id' | 'quantity'>, quantity = 1) => {
-    const id = createLineId(line.productId, line.length)
+    const id = createLineId(line.productId, line.length, line.hairType)
     setLines((current) => {
       const existing = current.find((item) => item.id === id)
       if (existing) {

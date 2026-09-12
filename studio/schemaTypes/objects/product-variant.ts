@@ -12,6 +12,21 @@ export const productVariantType = defineType({
         list: [
           {title: '18 inches', value: '18'},
           {title: '20 inches', value: '20'},
+          {title: '22 inches', value: '22'},
+        ],
+        layout: 'radio',
+      },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'hairType',
+      title: 'Hair type',
+      type: 'string',
+      initialValue: 'remy',
+      options: {
+        list: [
+          {title: 'Remy Hair', value: 'remy'},
+          {title: '100% Human Hair', value: 'human'},
         ],
         layout: 'radio',
       },
@@ -45,10 +60,11 @@ export const productVariantType = defineType({
     }),
   ],
   preview: {
-    select: {length: 'length', price: 'price', sku: 'sku'},
-    prepare({length, price, sku}) {
+    select: {length: 'length', hairType: 'hairType', price: 'price', sku: 'sku'},
+    prepare({length, hairType, price, sku}) {
+      const typeLabel = hairType === 'human' ? '100% Human Hair' : 'Remy Hair'
       return {
-        title: `${length}"`,
+        title: `${length}" · ${typeLabel}`,
         subtitle: price ? `$${price}${sku ? ` · ${sku}` : ''}` : sku,
       }
     },

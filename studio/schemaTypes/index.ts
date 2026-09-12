@@ -5,10 +5,12 @@ import {altImageType} from './objects/alt-image'
 import {productVariantType} from './objects/product-variant'
 import {pageBuilderType} from './objects/page-builder'
 import {
+  brandStatementType,
   editorialSplitType,
   featuredInType,
   heroType,
   instagramStripType,
+  personalCurationType,
   portraitGalleryType,
   productCarouselType,
   testimonialsBlockType,
@@ -32,9 +34,11 @@ export const schemaTypes = [
   productVariantType,
   pageBuilderType,
   heroType,
+  brandStatementType,
   portraitGalleryType,
   editorialSplitType,
   productCarouselType,
+  personalCurationType,
   testimonialsBlockType,
   featuredInType,
   videoMomentType,

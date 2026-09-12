@@ -21,6 +21,8 @@ export type InstagramPost = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
+  kind?: "photo" | "note";
+  label?: string;
   image?: AltImage;
   caption?: string;
   permalink?: string;
@@ -212,6 +214,12 @@ export type PageBuilder = Array<
     } & Hero)
   | ({
       _key: string;
+    } & BrandStatement)
+  | ({
+      _key: string;
+    } & FeaturedIn)
+  | ({
+      _key: string;
     } & PortraitGallery)
   | ({
       _key: string;
@@ -221,10 +229,10 @@ export type PageBuilder = Array<
     } & ProductCarousel)
   | ({
       _key: string;
-    } & TestimonialsBlock)
+    } & PersonalCuration)
   | ({
       _key: string;
-    } & FeaturedIn)
+    } & TestimonialsBlock)
   | ({
       _key: string;
     } & VideoMoment)
@@ -266,7 +274,9 @@ export type InstagramPostReference = {
 
 export type InstagramStrip = {
   _type: "instagramStrip";
+  eyebrow?: string;
   heading?: string;
+  body?: string;
   posts?: Array<
     {
       _key: string;
@@ -315,6 +325,15 @@ export type TestimonialsBlock = {
       _key: string;
     } & TestimonialReference
   >;
+};
+
+export type PersonalCuration = {
+  _type: "personalCuration";
+  eyebrow?: string;
+  heading?: string;
+  headingLine?: string;
+  body?: string;
+  image?: AltImage;
 };
 
 export type CollectionReference = {
@@ -376,8 +395,6 @@ export type EditorialSplit = {
 
 export type PortraitGallery = {
   _type: "portraitGallery";
-  statement?: string;
-  statementAccent?: string;
   eyebrow?: string;
   heading?: string;
   body?: string;
@@ -386,6 +403,12 @@ export type PortraitGallery = {
       _key: string;
     } & AltImage
   >;
+};
+
+export type BrandStatement = {
+  _type: "brandStatement";
+  statement?: string;
+  statementAccent?: string;
 };
 
 export type Hero = {
@@ -409,7 +432,8 @@ export type Cta = {
 
 export type ProductVariant = {
   _type: "productVariant";
-  length?: "18" | "20";
+  length?: "18" | "20" | "22";
+  hairType?: "remy" | "human";
   price?: number;
   compareAtPrice?: number;
   sku?: string;
@@ -559,12 +583,14 @@ export type AllSanitySchemaTypes =
   | FeaturedIn
   | TestimonialReference
   | TestimonialsBlock
+  | PersonalCuration
   | CollectionReference
   | ProductReference
   | ProductCarousel
   | Collection
   | EditorialSplit
   | PortraitGallery
+  | BrandStatement
   | Hero
   | Cta
   | ProductVariant
@@ -676,7 +702,7 @@ export type SITE_SETTINGS_QUERY_RESULT =
 
 // Source: ../src/sanity/queries.ts
 // Variable: HOME_PAGE_QUERY
-// Query: *[_id == "homePage"][0]{    title,    seo,    pageBuilder[]{      _key,      _type,      ...,      _type == "hero" => {        image{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop},        cta      },      _type == "portraitGallery" => {        statement,        statementAccent,        eyebrow,        heading,        body,        portraits[]{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop}      },      _type == "editorialSplit" => {        eyebrow,        heading,        headingLine,        body,        chromeLeft,        chromeRight,        panelEyebrow,        panelHeadline,        panelSubcopy,        image{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop},        cta      },      _type == "productCarousel" => {        "products": coalesce(          products[]->{  _id,  name,  "slug": slug.current,  shortPitch,  featured,  shopifyProductId,  gallery[0]{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop},  variants[]{    _key,    length,    price,    compareAtPrice,    sku,    inStock,    shopifyVariantId  }},          collection->products[]->{  _id,  name,  "slug": slug.current,  shortPitch,  featured,  shopifyProductId,  gallery[0]{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop},  variants[]{    _key,    length,    price,    compareAtPrice,    sku,    inStock,    shopifyVariantId  }}        )      },      _type == "testimonialsBlock" => {        testimonials[]->{          _id,          quote,          name,          role,          photo{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop}        }      },      _type == "featuredIn" => {        features[]->{          _id,          publication,          url,          logo{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop}        }      },      _type == "videoMoment" => {        poster{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop}      },      _type == "instagramStrip" => {        posts[]->{          _id,          caption,          permalink,          image{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop}        }      }    }  }
+// Query: *[_id == "homePage"][0]{    title,    seo,    pageBuilder[]{      _key,      _type,      ...,      _type == "hero" => {        image{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop},        cta      },      _type == "brandStatement" => {        statement,        statementAccent      },      _type == "portraitGallery" => {        statement,        statementAccent,        eyebrow,        heading,        body,        portraits[]{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop}      },      _type == "editorialSplit" => {        eyebrow,        heading,        headingLine,        body,        chromeLeft,        chromeRight,        panelEyebrow,        panelHeadline,        panelSubcopy,        image{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop},        cta      },      _type == "productCarousel" => {        "products": coalesce(          products[]->{  _id,  name,  "slug": slug.current,  shortPitch,  featured,  shopifyProductId,  gallery[0]{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop},  variants[]{    _key,    length,    hairType,    price,    compareAtPrice,    sku,    inStock,    shopifyVariantId  }},          collection->products[]->{  _id,  name,  "slug": slug.current,  shortPitch,  featured,  shopifyProductId,  gallery[0]{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop},  variants[]{    _key,    length,    hairType,    price,    compareAtPrice,    sku,    inStock,    shopifyVariantId  }}        )      },      _type == "personalCuration" => {        image{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop}      },      _type == "testimonialsBlock" => {        testimonials[]->{          _id,          quote,          name,          role,          photo{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop}        }      },      _type == "featuredIn" => {        features[]->{          _id,          publication,          url,          logo{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop}        }      },      _type == "videoMoment" => {        poster{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop}      },      _type == "instagramStrip" => {        posts[]->{          _id,          kind,          label,          caption,          permalink,          image{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop}        }      }    }  }
 export type HOME_PAGE_QUERY_RESULT =
   | {
       title: null;
@@ -702,6 +728,12 @@ export type HOME_PAGE_QUERY_RESULT =
       title: string | null;
       seo: Seo | null;
       pageBuilder: Array<
+        | {
+            _key: string;
+            _type: "brandStatement";
+            statement: string | null;
+            statementAccent: string | null;
+          }
         | {
             _key: string;
             _type: "editorialSplit";
@@ -781,9 +813,13 @@ export type HOME_PAGE_QUERY_RESULT =
         | {
             _key: string;
             _type: "instagramStrip";
+            eyebrow?: string;
             heading?: string;
+            body?: string;
             posts: Array<{
               _id: string;
+              kind: "note" | "photo" | null;
+              label: string | null;
               caption: string | null;
               permalink: string | null;
               image: {
@@ -805,9 +841,29 @@ export type HOME_PAGE_QUERY_RESULT =
           }
         | {
             _key: string;
+            _type: "personalCuration";
+            eyebrow?: string;
+            heading?: string;
+            headingLine?: string;
+            body?: string;
+            image: {
+              asset: {
+                _id: string;
+                url: string | null;
+                metadata: {
+                  lqip: string | null;
+                  dimensions: SanityImageDimensions | null;
+                } | null;
+              } | null;
+              alt: string | null;
+              caption: string | null;
+              hotspot: SanityImageHotspot | null;
+              crop: SanityImageCrop | null;
+            } | null;
+          }
+        | {
+            _key: string;
             _type: "portraitGallery";
-            statement: string | null;
-            statementAccent: string | null;
             eyebrow: string | null;
             heading: string | null;
             body: string | null;
@@ -825,6 +881,8 @@ export type HOME_PAGE_QUERY_RESULT =
               hotspot: SanityImageHotspot | null;
               crop: SanityImageCrop | null;
             }> | null;
+            statement: null;
+            statementAccent: null;
           }
         | {
             _key: string;
@@ -855,7 +913,8 @@ export type HOME_PAGE_QUERY_RESULT =
               } | null;
               variants: Array<{
                 _key: string;
-                length: "18" | "20" | null;
+                length: "18" | "20" | "22" | null;
+                hairType: "human" | "remy" | null;
                 price: number | null;
                 compareAtPrice: number | null;
                 sku: string | null;
@@ -1092,7 +1151,7 @@ export type CONTACT_PAGE_QUERY_RESULT =
 
 // Source: ../src/sanity/queries.ts
 // Variable: PRODUCTS_QUERY
-// Query: *[_type == "product" && defined(slug.current)] | order(name asc) {      _id,  name,  "slug": slug.current,  shortPitch,  featured,  shopifyProductId,  gallery[0]{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop},  variants[]{    _key,    length,    price,    compareAtPrice,    sku,    inStock,    shopifyVariantId  }  }
+// Query: *[_type == "product" && defined(slug.current)] | order(name asc) {      _id,  name,  "slug": slug.current,  shortPitch,  featured,  shopifyProductId,  gallery[0]{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop},  variants[]{    _key,    length,    hairType,    price,    compareAtPrice,    sku,    inStock,    shopifyVariantId  }  }
 export type PRODUCTS_QUERY_RESULT = Array<{
   _id: string;
   name: string | null;
@@ -1116,7 +1175,8 @@ export type PRODUCTS_QUERY_RESULT = Array<{
   } | null;
   variants: Array<{
     _key: string;
-    length: "18" | "20" | null;
+    length: "18" | "20" | "22" | null;
+    hairType: "human" | "remy" | null;
     price: number | null;
     compareAtPrice: number | null;
     sku: string | null;
@@ -1127,7 +1187,7 @@ export type PRODUCTS_QUERY_RESULT = Array<{
 
 // Source: ../src/sanity/queries.ts
 // Variable: COLLECTIONS_QUERY
-// Query: *[_type == "collection" && defined(slug.current)] | order(title asc) {    _id,    title,    "slug": slug.current,    description,    products[]->{  _id,  name,  "slug": slug.current,  shortPitch,  featured,  shopifyProductId,  gallery[0]{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop},  variants[]{    _key,    length,    price,    compareAtPrice,    sku,    inStock,    shopifyVariantId  }}  }
+// Query: *[_type == "collection" && defined(slug.current)] | order(title asc) {    _id,    title,    "slug": slug.current,    description,    products[]->{  _id,  name,  "slug": slug.current,  shortPitch,  featured,  shopifyProductId,  gallery[0]{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop},  variants[]{    _key,    length,    hairType,    price,    compareAtPrice,    sku,    inStock,    shopifyVariantId  }}  }
 export type COLLECTIONS_QUERY_RESULT = Array<{
   _id: string;
   title: string | null;
@@ -1156,7 +1216,8 @@ export type COLLECTIONS_QUERY_RESULT = Array<{
     } | null;
     variants: Array<{
       _key: string;
-      length: "18" | "20" | null;
+      length: "18" | "20" | "22" | null;
+      hairType: "human" | "remy" | null;
       price: number | null;
       compareAtPrice: number | null;
       sku: string | null;
@@ -1175,7 +1236,7 @@ export type PRODUCT_SLUGS_QUERY_RESULT = Array<{
 
 // Source: ../src/sanity/queries.ts
 // Variable: PRODUCT_QUERY
-// Query: *[_type == "product" && slug.current == $slug][0]{    _id,    name,    "slug": slug.current,    shortPitch,    description,    featured,    shopifyProductId,    gallery[]{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop},    variants[]{      _key,      length,      price,      compareAtPrice,      sku,      inStock,      shopifyVariantId    },    seo  }
+// Query: *[_type == "product" && slug.current == $slug][0]{    _id,    name,    "slug": slug.current,    shortPitch,    description,    featured,    shopifyProductId,    gallery[]{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop},    variants[]{      _key,      length,      hairType,      price,      compareAtPrice,      sku,      inStock,      shopifyVariantId    },    seo  }
 export type PRODUCT_QUERY_RESULT = {
   _id: string;
   name: string | null;
@@ -1217,7 +1278,8 @@ export type PRODUCT_QUERY_RESULT = {
   }> | null;
   variants: Array<{
     _key: string;
-    length: "18" | "20" | null;
+    length: "18" | "20" | "22" | null;
+    hairType: "human" | "remy" | null;
     price: number | null;
     compareAtPrice: number | null;
     sku: string | null;
@@ -1231,13 +1293,13 @@ export type PRODUCT_QUERY_RESULT = {
 declare global {
   interface SanityQueries {
     '\n  *[_id == "siteSettings"][0]{\n    siteTitle,\n    logo{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n    footerBlurb,\n    announcement,\n    navigation[]{\n      _key,\n      label,\n      linkType,\n      internalPath,\n      externalUrl\n    },\n    email,\n    phone,\n    address,\n    hours,\n    instagramHandle,\n    instagramUrl,\n    seo\n  }\n': SITE_SETTINGS_QUERY_RESULT;
-    '\n  *[_id == "homePage"][0]{\n    title,\n    seo,\n    pageBuilder[]{\n      _key,\n      _type,\n      ...,\n      _type == "hero" => {\n        image{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n        cta\n      },\n      _type == "portraitGallery" => {\n        statement,\n        statementAccent,\n        eyebrow,\n        heading,\n        body,\n        portraits[]{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n}\n      },\n      _type == "editorialSplit" => {\n        eyebrow,\n        heading,\n        headingLine,\n        body,\n        chromeLeft,\n        chromeRight,\n        panelEyebrow,\n        panelHeadline,\n        panelSubcopy,\n        image{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n        cta\n      },\n      _type == "productCarousel" => {\n        "products": coalesce(\n          products[]->{\n  _id,\n  name,\n  "slug": slug.current,\n  shortPitch,\n  featured,\n  shopifyProductId,\n  gallery[0]{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n  variants[]{\n    _key,\n    length,\n    price,\n    compareAtPrice,\n    sku,\n    inStock,\n    shopifyVariantId\n  }\n},\n          collection->products[]->{\n  _id,\n  name,\n  "slug": slug.current,\n  shortPitch,\n  featured,\n  shopifyProductId,\n  gallery[0]{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n  variants[]{\n    _key,\n    length,\n    price,\n    compareAtPrice,\n    sku,\n    inStock,\n    shopifyVariantId\n  }\n}\n        )\n      },\n      _type == "testimonialsBlock" => {\n        testimonials[]->{\n          _id,\n          quote,\n          name,\n          role,\n          photo{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n}\n        }\n      },\n      _type == "featuredIn" => {\n        features[]->{\n          _id,\n          publication,\n          url,\n          logo{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n}\n        }\n      },\n      _type == "videoMoment" => {\n        poster{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n}\n      },\n      _type == "instagramStrip" => {\n        posts[]->{\n          _id,\n          caption,\n          permalink,\n          image{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n}\n        }\n      }\n    }\n  }\n': HOME_PAGE_QUERY_RESULT;
+    '\n  *[_id == "homePage"][0]{\n    title,\n    seo,\n    pageBuilder[]{\n      _key,\n      _type,\n      ...,\n      _type == "hero" => {\n        image{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n        cta\n      },\n      _type == "brandStatement" => {\n        statement,\n        statementAccent\n      },\n      _type == "portraitGallery" => {\n        statement,\n        statementAccent,\n        eyebrow,\n        heading,\n        body,\n        portraits[]{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n}\n      },\n      _type == "editorialSplit" => {\n        eyebrow,\n        heading,\n        headingLine,\n        body,\n        chromeLeft,\n        chromeRight,\n        panelEyebrow,\n        panelHeadline,\n        panelSubcopy,\n        image{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n        cta\n      },\n      _type == "productCarousel" => {\n        "products": coalesce(\n          products[]->{\n  _id,\n  name,\n  "slug": slug.current,\n  shortPitch,\n  featured,\n  shopifyProductId,\n  gallery[0]{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n  variants[]{\n    _key,\n    length,\n    hairType,\n    price,\n    compareAtPrice,\n    sku,\n    inStock,\n    shopifyVariantId\n  }\n},\n          collection->products[]->{\n  _id,\n  name,\n  "slug": slug.current,\n  shortPitch,\n  featured,\n  shopifyProductId,\n  gallery[0]{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n  variants[]{\n    _key,\n    length,\n    hairType,\n    price,\n    compareAtPrice,\n    sku,\n    inStock,\n    shopifyVariantId\n  }\n}\n        )\n      },\n      _type == "personalCuration" => {\n        image{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n}\n      },\n      _type == "testimonialsBlock" => {\n        testimonials[]->{\n          _id,\n          quote,\n          name,\n          role,\n          photo{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n}\n        }\n      },\n      _type == "featuredIn" => {\n        features[]->{\n          _id,\n          publication,\n          url,\n          logo{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n}\n        }\n      },\n      _type == "videoMoment" => {\n        poster{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n}\n      },\n      _type == "instagramStrip" => {\n        posts[]->{\n          _id,\n          kind,\n          label,\n          caption,\n          permalink,\n          image{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n}\n        }\n      }\n    }\n  }\n': HOME_PAGE_QUERY_RESULT;
     '\n  *[_id == "aboutPage"][0]{\n    title,\n    eyebrow,\n    headline,\n    heroImage{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n    story,\n    moments[]{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n    seo\n  }\n': ABOUT_PAGE_QUERY_RESULT;
     '\n  *[_id == "contactPage"][0]{\n    title,\n    eyebrow,\n    headline,\n    intro,\n    note,\n    seo\n  }\n': CONTACT_PAGE_QUERY_RESULT;
-    '\n  *[_type == "product" && defined(slug.current)] | order(name asc) {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  shortPitch,\n  featured,\n  shopifyProductId,\n  gallery[0]{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n  variants[]{\n    _key,\n    length,\n    price,\n    compareAtPrice,\n    sku,\n    inStock,\n    shopifyVariantId\n  }\n\n  }\n': PRODUCTS_QUERY_RESULT;
-    '\n  *[_type == "collection" && defined(slug.current)] | order(title asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    products[]->{\n  _id,\n  name,\n  "slug": slug.current,\n  shortPitch,\n  featured,\n  shopifyProductId,\n  gallery[0]{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n  variants[]{\n    _key,\n    length,\n    price,\n    compareAtPrice,\n    sku,\n    inStock,\n    shopifyVariantId\n  }\n}\n  }\n': COLLECTIONS_QUERY_RESULT;
+    '\n  *[_type == "product" && defined(slug.current)] | order(name asc) {\n    \n  _id,\n  name,\n  "slug": slug.current,\n  shortPitch,\n  featured,\n  shopifyProductId,\n  gallery[0]{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n  variants[]{\n    _key,\n    length,\n    hairType,\n    price,\n    compareAtPrice,\n    sku,\n    inStock,\n    shopifyVariantId\n  }\n\n  }\n': PRODUCTS_QUERY_RESULT;
+    '\n  *[_type == "collection" && defined(slug.current)] | order(title asc) {\n    _id,\n    title,\n    "slug": slug.current,\n    description,\n    products[]->{\n  _id,\n  name,\n  "slug": slug.current,\n  shortPitch,\n  featured,\n  shopifyProductId,\n  gallery[0]{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n  variants[]{\n    _key,\n    length,\n    hairType,\n    price,\n    compareAtPrice,\n    sku,\n    inStock,\n    shopifyVariantId\n  }\n}\n  }\n': COLLECTIONS_QUERY_RESULT;
     '\n  *[_type == "product" && defined(slug.current)]{ "slug": slug.current }\n': PRODUCT_SLUGS_QUERY_RESULT;
-    '\n  *[_type == "product" && slug.current == $slug][0]{\n    _id,\n    name,\n    "slug": slug.current,\n    shortPitch,\n    description,\n    featured,\n    shopifyProductId,\n    gallery[]{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n    variants[]{\n      _key,\n      length,\n      price,\n      compareAtPrice,\n      sku,\n      inStock,\n      shopifyVariantId\n    },\n    seo\n  }\n': PRODUCT_QUERY_RESULT;
+    '\n  *[_type == "product" && slug.current == $slug][0]{\n    _id,\n    name,\n    "slug": slug.current,\n    shortPitch,\n    description,\n    featured,\n    shopifyProductId,\n    gallery[]{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n    variants[]{\n      _key,\n      length,\n      hairType,\n      price,\n      compareAtPrice,\n      sku,\n      inStock,\n      shopifyVariantId\n    },\n    seo\n  }\n': PRODUCT_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

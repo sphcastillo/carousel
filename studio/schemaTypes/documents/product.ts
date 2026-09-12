@@ -39,10 +39,15 @@ export const productType = defineType({
       type: 'array',
       of: [defineArrayMember({type: 'productVariant'})],
       validation: (rule) =>
-        rule.min(1).max(2).custom((variants) => {
-          const lengths = (variants || []).map((variant) => variant?.length).filter(Boolean)
-          if (new Set(lengths).size !== lengths.length) {
-            return 'Each length can only be used once'
+        rule.min(1).max(6).custom((variants) => {
+          const items = (variants || []) as Array<{length?: string; hairType?: string} | undefined>
+          const keys = items
+            .map((variant) =>
+              variant?.length ? `${variant.length}:${variant.hairType || 'remy'}` : null,
+            )
+            .filter(Boolean)
+          if (new Set(keys).size !== keys.length) {
+            return 'Each length and hair type pair can only be used once'
           }
           return true
         }),
@@ -69,12 +74,25 @@ export const productType = defineType({
       media: 'gallery.0',
       variant0: 'variants.0.length',
       variant1: 'variants.1.length',
+      variant2: 'variants.2.length',
+      type0: 'variants.0.hairType',
+      type1: 'variants.1.hairType',
+      type2: 'variants.2.hairType',
     },
-    prepare({title, media, variant0, variant1}) {
-      const lengths = [variant0, variant1].filter(Boolean).map((length) => `${length}"`)
+    prepare({title, media, variant0, variant1, variant2, type0, type1, type2}) {
+      const pairs = [
+        [variant0, type0],
+        [variant1, type1],
+        [variant2, type2],
+      ]
+        .filter(([length]) => Boolean(length))
+        .map(([length, hairType]) => {
+          const typeLabel = hairType === 'human' ? 'Human' : 'Remy'
+          return `${length}" ${typeLabel}`
+        })
       return {
         title,
-        subtitle: lengths.length ? lengths.join(' · ') : 'No lengths',
+        subtitle: pairs.length ? pairs.join(' · ') : 'No variants',
         media,
       }
     },
