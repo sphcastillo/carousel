@@ -6,29 +6,42 @@ import {EditorialSplit} from './EditorialSplit'
 import {FeaturedIn} from './featured-in'
 import {HeroBlock} from './hero'
 import {InstagramStrip} from './InstagramStrip'
-import {PortraitGallery} from './portrait-gallery'
+import {PortraitGallery} from './PortraitGallery'
 import {VideoMaskScroll} from './VideoMask'
 import {urlFor} from '@/sanity/image'
 import { Testimonials } from '../Testimonials'
 
+const FAVORITES_SLUGS = ['carousel-favorites', 'bestsellers']
+const PONYTAILS_SLUGS = ['carousel-ponytails']
 
 export function PageBuilder({
   blocks,
   favorites,
+  ponytails,
   instagramHandle,
   instagramUrl,
 }: {
   blocks?: Array<Record<string, unknown>> | null
   favorites?: ProductCardProduct[] | null
+  ponytails?: ProductCardProduct[] | null
   instagramHandle?: string | null
   instagramUrl?: string | null
 }) {
   if (!blocks?.length) return null
-  const favoritesBlock = blocks.find((block) => block._type === 'productCarousel')
+
+  const carouselBlocks = blocks.filter((block) => block._type === 'productCarousel')
+  const favoritesBlock =
+    carouselBlocks.find((block) => FAVORITES_SLUGS.includes(String(block.collectionSlug || ''))) ||
+    carouselBlocks[0]
+  const ponytailsBlock = carouselBlocks.find(
+    (block) =>
+      block !== favoritesBlock &&
+      PONYTAILS_SLUGS.includes(String(block.collectionSlug || '')),
+  ) || carouselBlocks.find((block) => block !== favoritesBlock)
 
   return (
     <>
-      {composeHomeSections(blocks).map((block) => {
+      {composeHomeSections(blocks, favoritesBlock, ponytailsBlock).map((block) => {
         const key = String(block._key || block._type)
         switch (block._type) {
           case 'hero':
@@ -47,17 +60,22 @@ export function PageBuilder({
             return <PortraitGallery key={key} block={block} />
           case 'editorialSplit':
             return <EditorialSplit key={key} block={block} />
-          case 'productCarousel':
+          case 'productCarousel': {
+            const products =
+              block === favoritesBlock && favorites != null
+                ? favorites
+                : block === ponytailsBlock && ponytails != null
+                  ? ponytails
+                  : (block.products as never)
             return (
               <ProductCarousel
                 key={key}
                 heading={block.heading as string}
                 eyebrow={block.eyebrow as string}
-                products={block === favoritesBlock && favorites !== null && favorites !== undefined
-                  ? favorites
-                  : block.products as never}
+                products={products}
               />
             )
+          }
           case 'personalCuration':
             return <PersonalCuration key={key} block={block} />
           case 'testimonialsBlock':
@@ -75,25 +93,26 @@ export function PageBuilder({
             return (
               <VideoMaskScroll
                 key={key}
+                eyebrow={block.eyebrow as string}
                 heading={block.heading as string}
                 subcopy={block.subcopy as string}
                 posterUrl={posterUrl}
               />
             )
           }
-          case 'instagramStrip':
-            return (
-              <InstagramStrip
-                key={key}
-                eyebrow={block.eyebrow as string}
-                heading={block.heading as string}
-                body={block.body as string}
-                ctaLabel={block.ctaLabel as string}
-                handle={instagramHandle}
-                profileUrl={instagramUrl}
-                posts={block.posts as never}
-              />
-            )
+          // case 'instagramStrip':
+          //   return (
+          //     <InstagramStrip
+          //       key={key}
+          //       eyebrow={block.eyebrow as string}
+          //       heading={block.heading as string}
+          //       body={block.body as string}
+          //       ctaLabel={block.ctaLabel as string}
+          //       handle={instagramHandle}
+          //       profileUrl={instagramUrl}
+          //       posts={block.posts as never}
+          //     />
+          //   )
           default:
             return null
         }
@@ -102,11 +121,16 @@ export function PageBuilder({
   )
 }
 
-function composeHomeSections(blocks: Array<Record<string, unknown>>) {
+function composeHomeSections(
+  blocks: Array<Record<string, unknown>>,
+  favoritesCarousel?: Record<string, unknown>,
+  ponytailsCarousel?: Record<string, unknown>,
+) {
   const featured = blocks.filter((block) => block._type === 'featuredIn')
   const brand = blocks.filter((block) => block._type === 'brandStatement')
   const curation = blocks.filter((block) => block._type === 'personalCuration')
   const gallery = blocks.find((block) => block._type === 'portraitGallery')
+  const video = blocks.find((block) => block._type === 'videoMoment')
   const statementBlocks =
     brand.length > 0
       ? brand
@@ -125,20 +149,35 @@ function composeHomeSections(blocks: Array<Record<string, unknown>>) {
     (block) =>
       block._type !== 'featuredIn' &&
       block._type !== 'brandStatement' &&
-      block._type !== 'personalCuration',
+      block._type !== 'personalCuration' &&
+      !(gallery && favoritesCarousel && block === favoritesCarousel) &&
+      !(video && ponytailsCarousel && block === ponytailsCarousel),
   )
 
   let placedCuration = false
   const withCuration = rest.flatMap((block) => {
-    if (block._type !== 'productCarousel' || placedCuration) return [block]
-    placedCuration = true
-    return [block, ...curation]
+    if (gallery && block._type === 'portraitGallery') {
+      placedCuration = true
+      return [
+        ...statementBlocks,
+        ...featured,
+        block,
+        ...(favoritesCarousel ? [favoritesCarousel] : []),
+        ...curation,
+      ]
+    }
+
+    if (video && block._type === 'videoMoment') {
+      return [block, ...(ponytailsCarousel ? [ponytailsCarousel] : [])]
+    }
+
+    if (!gallery && block._type === 'productCarousel' && !placedCuration) {
+      placedCuration = true
+      return [block, ...curation]
+    }
+
+    return [block]
   })
-  const ordered = placedCuration ? withCuration : [...withCuration, ...curation]
 
-  if (!gallery) return ordered
-
-  return ordered.flatMap((block) =>
-    block._type === 'portraitGallery' ? [...statementBlocks, ...featured, block] : [block],
-  )
+  return placedCuration ? withCuration : [...withCuration, ...curation]
 }

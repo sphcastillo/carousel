@@ -3,10 +3,12 @@ import {parseVideoUrl} from '@/lib/video'
 const CAROUSEL_FILM = '/videos/CarouselExtensions.mp4'
 
 export function VideoMaskScroll({
+  eyebrow,
   heading,
   subcopy,
   posterUrl,
 }: {
+  eyebrow?: string | null
   heading?: string | null
   subcopy?: string | null
   posterUrl?: string | null
@@ -16,8 +18,13 @@ export function VideoMaskScroll({
 
   return (
     <section className="bg-ink text-canvas pt-20 pb-60">
-      {heading || subcopy ? (
+      {eyebrow || heading || subcopy ? (
         <div className="mx-auto max-w-6xl px-4 pt-16 pb-10 md:px-8 md:pt-20 md:pb-12">
+          {eyebrow ? (
+            <p className="mb-3.5 font-mono text-[10px] tracking-[0.22em] text-canvas/72 uppercase">
+              {eyebrow}
+            </p>
+          ) : null}
           {heading ? (
             <h2 className="font-display text-5xl leading-[0.78] tracking-[-0.04em] md:text-7xl">{heading}</h2>
           ) : null}

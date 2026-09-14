@@ -169,6 +169,11 @@ export const videoMomentType = defineType({
   type: 'object',
   icon: BlockElementIcon,
   fields: [
+    defineField({
+      name: 'eyebrow',
+      type: 'string',
+      description: 'Small kicker above the heading, e.g. “The film”.',
+    }),
     defineField({name: 'heading', type: 'string'}),
     defineField({name: 'subcopy', type: 'text', rows: 2}),
     defineField({

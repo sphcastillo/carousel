@@ -41,8 +41,8 @@ export function EditorialSplit({
   if (!hasIntro && !hasPanel && !image?.asset) return null
 
   return (
-    <section className="bg-[color-mix(in_srgb,var(--ink)_68%,var(--primary))] px-5 pt-17 pb-19 md:px-12 md:pt-22 md:pb-24">
-      <div className="mx-auto max-w-6xl">
+    <section className="bg-[color-mix(in_srgb,var(--ink)_68%,var(--primary))] px-5 pt-17 pb-19 md:pt-22 md:pb-24 lg:px-12 min-[1064px]:px-48">
+      <div className="mx-auto max-w-5xl">
         {hasIntro ? (
           <div className="mb-[2.35rem] grid gap-7 md:mb-[2.85rem] md:grid-cols-[minmax(0,1.15fr)_minmax(16rem,0.7fr)] md:items-start md:gap-12">
             <div>

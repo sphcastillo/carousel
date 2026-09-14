@@ -32,7 +32,7 @@ export function PortraitGallery({
   const hasIntro = Boolean(block.eyebrow || block.heading || block.body)
 
   return (
-    <section className="mx-auto max-w-7xl px-5 pt-18 pb-22 md:px-10 md:pt-22 md:pb-28 gallery:px-20 lg:px-24">
+    <section className="mx-auto max-w-6xl px-5 pt-18 pb-22 md:px-10 md:pt-22 md:pb-0 gallery:px-20 lg:px-24">
         {hasIntro ? (
           <div className="mb-12 grid items-end gap-8 md:mb-16 md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.9fr)] md:gap-16">
             <div>

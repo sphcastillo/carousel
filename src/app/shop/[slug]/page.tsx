@@ -49,8 +49,7 @@ export default async function ProductPage({
     : data.previewImageUrl
       ? shopifySrc(data.previewImageUrl)
       : undefined
-  const optionLabel =
-    data.optionName && data.optionName !== 'Title' ? data.optionName : 'Details'
+  const optionLabel = data.optionName || 'Details'
 
   return (
     <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-2 md:px-8">

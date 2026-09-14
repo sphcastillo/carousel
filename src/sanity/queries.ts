@@ -109,6 +109,7 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
         cta
       },
       _type == "productCarousel" => {
+        "collectionSlug": coalesce(collection->store.slug.current, collection->slug.current),
         "products": coalesce(
           products[]->{${productCardProjection}},
           collection->products[]->{${productCardProjection}}
@@ -225,7 +226,10 @@ export const PRODUCT_QUERY = defineQuery(/* groq */ `
     featured,
     "shopifyProductId": store.gid,
     "previewImageUrl": store.previewImageUrl,
-    "optionName": store.options[0].name,
+    "optionName": select(
+      store.options[0].name == "Title" => null,
+      store.options[0].name
+    ),
     gallery[]{${imageProjection}},
     "variants": store.variants[]->{${shopifyVariantProjection}},
     seo

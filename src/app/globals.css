@@ -27,9 +27,6 @@
   --breakpoint-gallery: 925px;
   --animate-marquee: marquee 28s linear infinite;
   --animate-product-marquee: marquee 110s linear infinite;
-  --animate-testimonial-marquee: marquee 48s linear infinite;
-  --animate-testimonial-marquee-rev: marquee-reverse 56s linear infinite;
-  --animate-testimonial-float: testimonial-float 5.5s ease-in-out infinite;
 }
 
 html,
@@ -52,24 +49,5 @@ body {
   }
   to {
     transform: translateX(-50%);
-  }
-}
-
-@keyframes marquee-reverse {
-  from {
-    transform: translateX(-50%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
-@keyframes testimonial-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-0.55rem);
   }
 }
