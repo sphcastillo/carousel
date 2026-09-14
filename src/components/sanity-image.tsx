@@ -26,6 +26,7 @@ export function SanityImage({
   priority = false,
   quality = 75,
   srcWidth,
+  fit,
 }: {
   image?: unknown
   alt?: string
@@ -37,6 +38,7 @@ export function SanityImage({
   priority?: boolean
   quality?: number
   srcWidth?: number
+  fit?: 'crop' | 'max'
 }) {
   const value = image as SanityImageValue
   if (!value?.asset) return null
@@ -47,7 +49,9 @@ export function SanityImage({
   const requestedWidth = srcWidth || width || (fill ? 2400 : 1600)
   const targetWidth = nativeWidth ? Math.min(requestedWidth, nativeWidth) : requestedWidth
   let builder = urlFor(value).auto('format').quality(quality)
-  if (value.hotspot || value.crop) {
+  if (fit === 'max') {
+    builder = builder.fit('max')
+  } else if (fit === 'crop' || value.hotspot || value.crop) {
     builder = builder.fit('crop')
   }
   const src = builder.width(Math.round(targetWidth)).url()

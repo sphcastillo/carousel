@@ -1,3 +1,4 @@
+import type {CSSProperties} from 'react'
 import Link from 'next/link'
 import {SanityImage} from '@/components/sanity-image'
 import {resolveHref} from '@/lib/links'
@@ -24,8 +25,27 @@ export function HeroBlock({
 }) {
   const href = resolveHref(block.cta) || '/shop'
   const label = block.cta?.label || 'Shop'
+  const image = block.image as {
+    asset?: {metadata?: {dimensions?: {width?: number; height?: number} | null} | null} | null
+  } | null
+  const imageWidth = image?.asset?.metadata?.dimensions?.width
+  const imageHeight = image?.asset?.metadata?.dimensions?.height
+  const hasAspect = Boolean(imageWidth && imageHeight)
+
   return (
-    <section id="home-hero" className="relative h-svh min-h-168 overflow-hidden">
+    <section
+      id="home-hero"
+      className={
+        hasAspect
+          ? 'relative h-svh min-h-168 overflow-hidden bg-nav xl:aspect-(--hero-aspect) xl:h-auto xl:min-h-0'
+          : 'relative h-svh min-h-168 overflow-hidden bg-nav'
+      }
+      style={
+        hasAspect
+          ? ({['--hero-aspect']: `${imageWidth} / ${imageHeight}`} as CSSProperties)
+          : undefined
+      }
+    >
       <div className="absolute inset-0">
         <SanityImage
           image={block.image}
@@ -35,6 +55,7 @@ export function HeroBlock({
           sizes="100vw"
           quality={90}
           srcWidth={3840}
+          fit="max"
           className="object-cover object-[67%_center] sm:object-center"
         />
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(55,7,16,0.61),rgba(55,7,16,0.04)_63%,rgba(30,3,7,0.22))]" />
