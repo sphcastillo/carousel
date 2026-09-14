@@ -1,0 +1,49 @@
+import {parseVideoUrl} from '@/lib/video'
+
+const CAROUSEL_FILM = '/videos/CarouselExtensions.mp4'
+
+export function VideoMaskScroll({
+  heading,
+  subcopy,
+  posterUrl,
+}: {
+  heading?: string | null
+  subcopy?: string | null
+  posterUrl?: string | null
+}) {
+  const parsed = parseVideoUrl(CAROUSEL_FILM)
+  if (!parsed) return null
+
+  return (
+    <section className="bg-ink text-canvas pt-20 pb-60">
+      {heading || subcopy ? (
+        <div className="mx-auto max-w-6xl px-4 pt-16 pb-10 md:px-8 md:pt-20 md:pb-12">
+          {heading ? (
+            <h2 className="font-display text-5xl leading-[0.78] tracking-[-0.04em] md:text-7xl">{heading}</h2>
+          ) : null}
+          {subcopy ? <p className="mt-5 max-w-xl text-sm leading-relaxed text-canvas/70">{subcopy}</p> : null}
+        </div>
+      ) : null}
+      <div className="mx-auto aspect-video w-full max-w-6xl overflow-hidden bg-ink">
+        {parsed.kind === 'file' ? (
+          <video
+            className="h-full w-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            poster={posterUrl || undefined}
+            src={parsed.src}
+          />
+        ) : (
+          <iframe
+            src={parsed.src}
+            title={heading || 'Carousel film'}
+            className="h-full w-full"
+            allow="autoplay; fullscreen"
+          />
+        )}
+      </div>
+    </section>
+  )
+}

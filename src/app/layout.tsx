@@ -3,10 +3,11 @@ import {Cormorant_Garamond, DM_Mono, Italiana, Manrope} from 'next/font/google'
 import {VisualEditing} from 'next-sanity/visual-editing'
 import {draftMode} from 'next/headers'
 import {CartProvider} from '@/components/cart-provider'
-import {SiteFooter} from '@/components/site-footer'
 import {SiteHeader} from '@/components/site-header'
 import {SanityLive} from '@/sanity/live'
+import { Footer } from '@/components/Footer'
 import './globals.css'
+
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -56,7 +57,7 @@ export default async function RootLayout({
         <CartProvider>
           <SiteHeader />
           <main className="flex-1">{children}</main>
-          <SiteFooter />
+          <Footer />
         </CartProvider>
         <SanityLive />
         {isDraftMode ? <VisualEditing /> : null}

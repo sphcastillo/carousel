@@ -1,56 +1,158 @@
-import {defineArrayMember, defineField, defineType} from 'sanity'
 import {BasketIcon} from '@sanity/icons'
+import {defineArrayMember, defineField, defineType} from 'sanity'
 
 export const productType = defineType({
   name: 'product',
   title: 'Product',
   type: 'document',
   icon: BasketIcon,
+
   fields: [
     defineField({
-      name: 'name',
-      type: 'string',
-      validation: (rule) => rule.required(),
+      name: 'store',
+      title: 'Shopify product data',
+      type: 'object',
+      description: 'Managed automatically by Shopify.',
+      readOnly: true,
+      fields: [
+        defineField({
+          name: 'createdAt',
+          type: 'datetime',
+        }),
+        defineField({
+          name: 'shopifyTriggeredAt',
+          type: 'datetime',
+        }),
+        defineField({
+          name: 'descriptionHtml',
+          title: 'Shopify description',
+          type: 'text',
+          rows: 5,
+        }),
+        defineField({
+          name: 'gid',
+          title: 'Shopify GID',
+          type: 'string',
+        }),
+        defineField({
+          name: 'id',
+          title: 'Shopify ID',
+          type: 'number',
+        }),
+        defineField({
+          name: 'isDeleted',
+          type: 'boolean',
+        }),
+        defineField({
+          name: 'options',
+          type: 'array',
+          of: [
+            defineArrayMember({
+              name: 'option',
+              type: 'object',
+              fields: [
+                defineField({
+                  name: 'name',
+                  type: 'string',
+                }),
+                defineField({
+                  name: 'values',
+                  type: 'array',
+                  of: [defineArrayMember({type: 'string'})],
+                }),
+              ],
+            }),
+          ],
+        }),
+        defineField({
+          name: 'previewImageUrl',
+          title: 'Preview image URL',
+          type: 'url',
+        }),
+        defineField({
+          name: 'priceRange',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'minVariantPrice',
+              title: 'Minimum variant price',
+              type: 'number',
+            }),
+            defineField({
+              name: 'maxVariantPrice',
+              title: 'Maximum variant price',
+              type: 'number',
+            }),
+          ],
+        }),
+        defineField({
+          name: 'productType',
+          type: 'string',
+        }),
+        defineField({
+          name: 'shop',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'domain',
+              type: 'string',
+            }),
+          ],
+        }),
+        defineField({
+          name: 'slug',
+          type: 'slug',
+        }),
+        defineField({
+          name: 'status',
+          type: 'string',
+        }),
+        defineField({
+          name: 'tags',
+          type: 'string',
+        }),
+        defineField({
+          name: 'title',
+          type: 'string',
+        }),
+        defineField({
+          name: 'variants',
+          type: 'array',
+          of: [
+            defineArrayMember({
+              type: 'reference',
+              to: [{type: 'productVariant'}],
+              weak: true,
+            }),
+          ],
+        }),
+        defineField({
+          name: 'vendor',
+          type: 'string',
+        }),
+      ],
     }),
-    defineField({
-      name: 'slug',
-      type: 'slug',
-      options: {source: 'name'},
-      validation: (rule) => rule.required(),
-    }),
+
+    // Editable Carousel content
     defineField({
       name: 'shortPitch',
       type: 'string',
-      description: 'One-line merchandising line for cards and carousels',
+      description: 'A short merchandising line for cards and carousels.',
+      validation: (rule) => rule.max(120),
     }),
     defineField({
       name: 'description',
+      title: 'Editorial description',
       type: 'array',
+      description:
+        'Carousel website copy. This does not overwrite the Shopify description.',
       of: [defineArrayMember({type: 'block'})],
     }),
     defineField({
       name: 'gallery',
+      title: 'Editorial gallery',
       type: 'array',
       of: [defineArrayMember({type: 'altImage'})],
-      validation: (rule) => rule.min(1),
-    }),
-    defineField({
-      name: 'variants',
-      type: 'array',
-      of: [defineArrayMember({type: 'productVariant'})],
-      validation: (rule) =>
-        rule.min(1).max(6).custom((variants) => {
-          const items = (variants || []) as Array<{length?: string; hairType?: string} | undefined>
-          const keys = items
-            .map((variant) =>
-              variant?.length ? `${variant.length}:${variant.hairType || 'remy'}` : null,
-            )
-            .filter(Boolean)
-          if (new Set(keys).size !== keys.length) {
-            return 'Each length and hair type pair can only be used once'
-          }
-          return true
-        }),
     }),
     defineField({
       name: 'featured',
@@ -58,41 +160,29 @@ export const productType = defineType({
       initialValue: false,
     }),
     defineField({
-      name: 'shopifyProductId',
-      title: 'Shopify product ID',
-      type: 'string',
-      description: 'Optional GID so a future Storefront API checkout can map this product',
-    }),
-    defineField({
       name: 'seo',
       type: 'seo',
     }),
   ],
+
   preview: {
     select: {
-      title: 'name',
+      title: 'store.title',
+      productType: 'store.productType',
+      status: 'store.status',
+      price: 'store.priceRange.minVariantPrice',
       media: 'gallery.0',
-      variant0: 'variants.0.length',
-      variant1: 'variants.1.length',
-      variant2: 'variants.2.length',
-      type0: 'variants.0.hairType',
-      type1: 'variants.1.hairType',
-      type2: 'variants.2.hairType',
     },
-    prepare({title, media, variant0, variant1, variant2, type0, type1, type2}) {
-      const pairs = [
-        [variant0, type0],
-        [variant1, type1],
-        [variant2, type2],
-      ]
-        .filter(([length]) => Boolean(length))
-        .map(([length, hairType]) => {
-          const typeLabel = hairType === 'human' ? 'Human' : 'Remy'
-          return `${length}" ${typeLabel}`
-        })
+    prepare({title, productType, status, price, media}) {
+      const details = [
+        productType,
+        typeof price === 'number' ? `$${price}` : undefined,
+        status,
+      ].filter(Boolean)
+
       return {
-        title,
-        subtitle: pairs.length ? pairs.join(' · ') : 'No variants',
+        title: title || 'Untitled Shopify product',
+        subtitle: details.join(' · '),
         media,
       }
     },

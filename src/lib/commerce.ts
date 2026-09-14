@@ -5,6 +5,13 @@ export function isLengthOption(value: string | null | undefined): value is Lengt
   return LENGTH_OPTIONS.includes(value as LengthOption)
 }
 
+export function parseLengthOption(value: string | null | undefined): LengthOption | null {
+  if (!value || value === 'Default Title') return null
+  if (isLengthOption(value)) return value
+  const inches = value.match(/(\d+)\s*(inches|inch|in|")?/i)?.[1]
+  return isLengthOption(inches) ? inches : null
+}
+
 export const HAIR_TYPE_OPTIONS = ['remy', 'human'] as const
 export type HairTypeOption = (typeof HAIR_TYPE_OPTIONS)[number]
 
@@ -28,16 +35,16 @@ export type CartLine = {
   name: string
   imageUrl?: string
   imageAlt?: string
-  length: LengthOption
-  hairType: HairTypeOption
+  length: string
+  hairType?: HairTypeOption
   price: number
   quantity: number
   shopifyProductId?: string
   shopifyVariantId?: string
 }
 
-export function createLineId(productId: string, length: LengthOption, hairType: HairTypeOption) {
-  return `${productId}:${length}:${hairType}`
+export function createLineId(productId: string, length: string, hairType?: string) {
+  return `${productId}:${length}:${hairType || 'default'}`
 }
 
 /** Swap this later for a Shopify Storefront API cart create / checkout URL. */

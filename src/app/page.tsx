@@ -2,6 +2,7 @@ import type {Metadata} from 'next'
 import {PageBuilder} from '@/components/home/page-builder'
 import {sanityFetch} from '@/sanity/live'
 import {HOME_PAGE_QUERY, SITE_SETTINGS_QUERY} from '@/sanity/queries'
+import {getCarouselFavorites} from '@/lib/shopify'
 
 export async function generateMetadata(): Promise<Metadata> {
   const {data} = await sanityFetch({query: HOME_PAGE_QUERY})
@@ -12,14 +13,16 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [{data: page}, {data: settings}] = await Promise.all([
+  const [{data: page}, {data: settings}, favorites] = await Promise.all([
     sanityFetch({query: HOME_PAGE_QUERY}),
     sanityFetch({query: SITE_SETTINGS_QUERY}),
+    getCarouselFavorites(),
   ])
 
   return (
     <PageBuilder
       blocks={page?.pageBuilder as never}
+      favorites={favorites}
       instagramHandle={settings?.instagramHandle}
       instagramUrl={settings?.instagramUrl}
     />

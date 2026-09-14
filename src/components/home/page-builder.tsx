@@ -1,25 +1,30 @@
 import {PersonalCuration} from '@/components/personal-curation'
-import {ProductCarousel} from '@/components/product-carousel'
+import {ProductCarousel} from '@/components/ProductCarousel'
+import type {ProductCardProduct} from '@/components/ProductCard'
 import {BrandStatement} from './brand-statement'
-import {EditorialSplit} from './editorial-split'
+import {EditorialSplit} from './EditorialSplit'
 import {FeaturedIn} from './featured-in'
 import {HeroBlock} from './hero'
-import {InstagramStrip} from './instagram-strip'
+import {InstagramStrip} from './InstagramStrip'
 import {PortraitGallery} from './portrait-gallery'
-import {TestimonialsBlock} from './testimonials'
-import {VideoMaskScroll} from './video-mask'
+import {VideoMaskScroll} from './VideoMask'
 import {urlFor} from '@/sanity/image'
+import { Testimonials } from '../Testimonials'
+
 
 export function PageBuilder({
   blocks,
+  favorites,
   instagramHandle,
   instagramUrl,
 }: {
   blocks?: Array<Record<string, unknown>> | null
+  favorites?: ProductCardProduct[] | null
   instagramHandle?: string | null
   instagramUrl?: string | null
 }) {
   if (!blocks?.length) return null
+  const favoritesBlock = blocks.find((block) => block._type === 'productCarousel')
 
   return (
     <>
@@ -48,15 +53,18 @@ export function PageBuilder({
                 key={key}
                 heading={block.heading as string}
                 eyebrow={block.eyebrow as string}
-                products={block.products as never}
+                products={block === favoritesBlock && favorites !== null && favorites !== undefined
+                  ? favorites
+                  : block.products as never}
               />
             )
           case 'personalCuration':
             return <PersonalCuration key={key} block={block} />
           case 'testimonialsBlock':
             return (
-              <TestimonialsBlock
+              <Testimonials
                 key={key}
+                eyebrow={block.eyebrow as string}
                 heading={block.heading as string}
                 testimonials={block.testimonials as never}
               />
@@ -69,7 +77,6 @@ export function PageBuilder({
                 key={key}
                 heading={block.heading as string}
                 subcopy={block.subcopy as string}
-                videoUrl={block.videoUrl as string}
                 posterUrl={posterUrl}
               />
             )

@@ -4,10 +4,10 @@ import {useMemo, useState, type ReactNode} from 'react'
 import {
   formatMoney,
   HAIR_TYPE_LABELS,
+  isHairTypeOption,
   isLengthOption,
-  resolveHairType,
+  parseLengthOption,
   type HairTypeOption,
-  type LengthOption,
 } from '@/lib/commerce'
 import {useCart} from './cart-provider'
 
@@ -28,6 +28,7 @@ export function ProductPurchase({
   imageUrl,
   imageAlt,
   shopifyProductId,
+  optionName = 'Length',
   variants,
 }: {
   productId: string
@@ -36,27 +37,33 @@ export function ProductPurchase({
   imageUrl?: string
   imageAlt?: string
   shopifyProductId?: string | null
+  optionName?: string | null
   variants: Variant[]
 }) {
   const available = useMemo(
-    () =>
-      variants
-        .filter(
-          (variant): variant is Variant & {length: LengthOption; price: number} =>
-            isLengthOption(variant.length) && typeof variant.price === 'number',
-        )
-        .map((variant) => ({...variant, hairType: resolveHairType(variant.hairType)})),
+    () => variants.filter((variant): variant is Variant & {price: number} => typeof variant.price === 'number'),
     [variants],
   )
-  const lengths = useMemo(
-    () => [...new Set(available.map((variant) => variant.length))],
-    [available],
-  )
-  const [length, setLength] = useState<LengthOption>(lengths[0] || '18')
+  const optionValues = useMemo(() => {
+    const values = available
+      .map((variant) => variant.length)
+      .filter((value): value is string => Boolean(value && value !== 'Default Title'))
+    return [...new Set(values)]
+  }, [available])
+  const usesLength = optionValues.some((value) => parseLengthOption(value))
+  const [option, setOption] = useState(optionValues[0] || '')
+  const selectedOption = optionValues.includes(option) ? option : optionValues[0] || ''
   const hairTypes = useMemo(
     () =>
-      [...new Set(available.filter((variant) => variant.length === length).map((variant) => variant.hairType))],
-    [available, length],
+      [
+        ...new Set(
+          available
+            .filter((variant) => !selectedOption || variant.length === selectedOption)
+            .map((variant) => variant.hairType)
+            .filter(isHairTypeOption),
+        ),
+      ],
+    [available, selectedOption],
   )
   const [hairType, setHairType] = useState<HairTypeOption>(hairTypes[0] || 'remy')
   const {addItem} = useCart()
@@ -64,38 +71,30 @@ export function ProductPurchase({
   const selectedHairType = hairTypes.includes(hairType) ? hairType : hairTypes[0]
   const selected =
     available.find(
-      (variant) => variant.length === length && variant.hairType === selectedHairType,
+      (variant) =>
+        (selectedOption ? variant.length === selectedOption : true) &&
+        (selectedHairType ? variant.hairType === selectedHairType : true),
     ) || available[0]
 
   if (!selected) return null
 
-  function chooseLength(next: LengthOption) {
-    setLength(next)
-    const types = available
-      .filter((variant) => variant.length === next)
-      .map((variant) => variant.hairType)
-    if (!types.includes(hairType)) setHairType(types[0] || 'remy')
-  }
-
   return (
     <div className="mt-8 space-y-6">
-      <OptionRow label="Length">
-        {lengths.map((option) => (
-          <OptionButton key={option} active={option === length} onClick={() => chooseLength(option)}>
-            {option}&quot;
-          </OptionButton>
-        ))}
-      </OptionRow>
+      {optionValues.length > 0 ? (
+        <OptionRow label={usesLength ? 'Length' : optionName || 'Option'}>
+          {optionValues.map((value) => (
+            <OptionButton key={value} active={value === selectedOption} onClick={() => setOption(value)}>
+              {usesLength && isLengthOption(parseLengthOption(value)) ? `${parseLengthOption(value)}"` : value}
+            </OptionButton>
+          ))}
+        </OptionRow>
+      ) : null}
 
       {hairTypes.length > 0 ? (
         <OptionRow label="Hair type">
-          {hairTypes.map((option) => (
-            <OptionButton
-              key={option}
-              active={option === selectedHairType}
-              onClick={() => setHairType(option)}
-            >
-              {HAIR_TYPE_LABELS[option]}
+          {hairTypes.map((value) => (
+            <OptionButton key={value} active={value === selectedHairType} onClick={() => setHairType(value)}>
+              {HAIR_TYPE_LABELS[value]}
             </OptionButton>
           ))}
         </OptionRow>
@@ -118,8 +117,8 @@ export function ProductPurchase({
             name,
             imageUrl,
             imageAlt,
-            length: selected.length,
-            hairType: selected.hairType,
+            length: selectedOption || 'default',
+            hairType: selectedHairType,
             price: selected.price,
             shopifyProductId: shopifyProductId || undefined,
             shopifyVariantId: selected.shopifyVariantId || undefined,
@@ -127,12 +126,18 @@ export function ProductPurchase({
         }
         className="inline-flex w-full items-center justify-center rounded-full bg-primary px-[1.4rem] py-4 font-mono text-[0.7rem] tracking-[0.18em] text-canvas uppercase disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {selected.inStock === false
-          ? 'Currently restocking'
-          : `Add ${selected.length}" ${HAIR_TYPE_LABELS[selected.hairType]}`}
+        {selected.inStock === false ? 'Currently restocking' : addLabel(selectedOption, selectedHairType, usesLength)}
       </button>
     </div>
   )
+}
+
+function addLabel(option: string, hairType: HairTypeOption | undefined, usesLength: boolean) {
+  const parts = [
+    usesLength && parseLengthOption(option) ? `${parseLengthOption(option)}"` : option && option !== 'default' ? option : null,
+    hairType ? HAIR_TYPE_LABELS[hairType] : null,
+  ].filter(Boolean)
+  return parts.length ? `Add ${parts.join(' ')}` : 'Add to bag'
 }
 
 function OptionRow({label, children}: {label: string; children: ReactNode}) {

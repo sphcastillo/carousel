@@ -2,70 +2,132 @@ import {defineField, defineType} from 'sanity'
 
 export const productVariantType = defineType({
   name: 'productVariant',
-  title: 'Product variant',
-  type: 'object',
+  title: 'Shopify product variant',
+  type: 'document',
+
   fields: [
     defineField({
-      name: 'length',
-      type: 'string',
-      options: {
-        list: [
-          {title: '18 inches', value: '18'},
-          {title: '20 inches', value: '20'},
-          {title: '22 inches', value: '22'},
-        ],
-        layout: 'radio',
-      },
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'hairType',
-      title: 'Hair type',
-      type: 'string',
-      initialValue: 'remy',
-      options: {
-        list: [
-          {title: 'Remy Hair', value: 'remy'},
-          {title: '100% Human Hair', value: 'human'},
-        ],
-        layout: 'radio',
-      },
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'price',
-      type: 'number',
-      validation: (rule) => rule.required().positive(),
-    }),
-    defineField({
-      name: 'compareAtPrice',
-      title: 'Compare-at price',
-      type: 'number',
-    }),
-    defineField({
-      name: 'sku',
-      title: 'SKU',
-      type: 'string',
-    }),
-    defineField({
-      name: 'inStock',
-      type: 'boolean',
-      initialValue: true,
-    }),
-    defineField({
-      name: 'shopifyVariantId',
-      title: 'Shopify variant ID',
-      type: 'string',
-      description: 'Optional GID for a future Storefront API checkout',
+      name: 'store',
+      title: 'Shopify variant data',
+      type: 'object',
+      description: 'Managed automatically by Shopify.',
+      readOnly: true,
+      fields: [
+        defineField({
+          name: 'barcode',
+          type: 'string',
+        }),
+        defineField({
+          name: 'compareAtPrice',
+          type: 'number',
+        }),
+        defineField({
+          name: 'createdAt',
+          type: 'datetime',
+        }),
+        defineField({
+          name: 'gid',
+          title: 'Shopify GID',
+          type: 'string',
+        }),
+        defineField({
+          name: 'id',
+          title: 'Shopify ID',
+          type: 'number',
+        }),
+        defineField({
+          name: 'inventory',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'isAvailable',
+              type: 'boolean',
+            }),
+            defineField({
+              name: 'policy',
+              type: 'string',
+            }),
+          ],
+        }),
+        defineField({
+          name: 'isDeleted',
+          type: 'boolean',
+        }),
+        defineField({
+          name: 'option1',
+          type: 'string',
+        }),
+        defineField({
+          name: 'option2',
+          type: 'string',
+        }),
+        defineField({
+          name: 'option3',
+          type: 'string',
+        }),
+        defineField({
+          name: 'previewImageUrl',
+          title: 'Preview image URL',
+          type: 'url',
+        }),
+        defineField({
+          name: 'price',
+          type: 'number',
+        }),
+        defineField({
+          name: 'productGid',
+          title: 'Shopify product GID',
+          type: 'string',
+        }),
+        defineField({
+          name: 'productId',
+          title: 'Shopify product ID',
+          type: 'number',
+        }),
+        defineField({
+          name: 'shop',
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'domain',
+              type: 'string',
+            }),
+          ],
+        }),
+        defineField({
+          name: 'sku',
+          title: 'SKU',
+          type: 'string',
+        }),
+        defineField({
+          name: 'status',
+          type: 'string',
+        }),
+        defineField({
+          name: 'title',
+          type: 'string',
+        }),
+      ],
     }),
   ],
+
   preview: {
-    select: {length: 'length', hairType: 'hairType', price: 'price', sku: 'sku'},
-    prepare({length, hairType, price, sku}) {
-      const typeLabel = hairType === 'human' ? '100% Human Hair' : 'Remy Hair'
+    select: {
+      title: 'store.title',
+      sku: 'store.sku',
+      price: 'store.price',
+      available: 'store.inventory.isAvailable',
+    },
+    prepare({title, sku, price, available}) {
+      const details = [
+        sku,
+        typeof price === 'number' ? `$${price}` : undefined,
+        available === false ? 'Unavailable' : undefined,
+      ].filter(Boolean)
+
       return {
-        title: `${length}" · ${typeLabel}`,
-        subtitle: price ? `$${price}${sku ? ` · ${sku}` : ''}` : sku,
+        title: title || 'Shopify variant',
+        subtitle: details.join(' · '),
       }
     },
   },

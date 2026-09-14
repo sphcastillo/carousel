@@ -7,10 +7,10 @@ type Portrait = {
 }
 
 const collagePlacement = [
-  'md:row-span-2 max-md:aspect-[4/5]',
-  'md:col-start-2 md:row-start-1 max-md:aspect-[4/3]',
-  'md:col-start-3 md:row-start-1 max-md:aspect-[4/3]',
-  'md:col-span-2 md:col-start-2 md:row-start-2 max-md:aspect-[4/3]',
+  'sm:row-span-2 max-sm:aspect-[4/5]',
+  'sm:col-start-2 sm:row-start-1 max-sm:aspect-[4/3]',
+  'sm:col-start-3 sm:row-start-1 max-sm:aspect-[4/3]',
+  'sm:col-span-2 sm:col-start-2 sm:row-start-2 max-sm:aspect-[4/3]',
 ]
 
 export function PortraitGallery({
@@ -53,7 +53,7 @@ export function PortraitGallery({
           </div>
         ) : null}
 
-        <div className="grid min-h-[min(52vh,34rem)] grid-cols-[1.05fr_1fr_0.82fr] grid-rows-2 gap-[0.85rem] max-md:min-h-0 max-md:grid-cols-1 max-md:grid-rows-none">
+        <div className="grid min-h-[min(52vh,34rem)] grid-cols-[1.05fr_1fr_0.82fr] grid-rows-2 gap-[0.85rem] max-sm:min-h-0 max-sm:grid-cols-1 max-sm:grid-rows-none">
           {featured.map((portrait, index) => (
             <PortraitFigure
               key={portrait.alt || index}
@@ -61,10 +61,10 @@ export function PortraitGallery({
               className={collagePlacement[index]}
               sizes={
                 index === 0
-                  ? '(min-width: 768px) 38vw, 100vw'
+                  ? '(min-width: 640px) 38vw, 100vw'
                   : index === 3
-                    ? '(min-width: 768px) 48vw, 100vw'
-                    : '(min-width: 768px) 28vw, 100vw'
+                    ? '(min-width: 640px) 48vw, 100vw'
+                    : '(min-width: 640px) 28vw, 100vw'
               }
             />
           ))}
@@ -84,7 +84,7 @@ function PortraitFigure({
 }) {
   return (
     <figure
-      className={`relative h-full min-h-0 overflow-hidden bg-[color-mix(in_srgb,var(--secondary)_35%,var(--canvas))] max-md:h-auto ${className}`}
+      className={`relative h-full min-h-0 overflow-hidden bg-[color-mix(in_srgb,var(--secondary)_35%,var(--canvas))] max-sm:h-auto ${className}`}
     >
       <SanityImage
         image={portrait}

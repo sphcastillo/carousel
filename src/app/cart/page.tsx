@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import {formatMoney, getCheckoutAction, HAIR_TYPE_LABELS} from '@/lib/commerce'
+import {formatMoney, getCheckoutAction, HAIR_TYPE_LABELS, isLengthOption, parseLengthOption} from '@/lib/commerce'
 import {useCart} from '@/components/cart-provider'
 
 export default function CartPage() {
@@ -54,9 +54,11 @@ export default function CartPage() {
                       <Link href={`/shop/${line.slug}`} className="font-display text-3xl">
                         {line.name}
                       </Link>
-                      <p className="mt-1 font-mono text-[10px] tracking-[0.16em] uppercase text-ink/60">
-                        {line.length}&quot; · {HAIR_TYPE_LABELS[line.hairType]}
-                      </p>
+                      {lineDetails(line.length, line.hairType) ? (
+                        <p className="mt-1 font-mono text-[10px] tracking-[0.16em] uppercase text-ink/60">
+                          {lineDetails(line.length, line.hairType)}
+                        </p>
+                      ) : null}
                     </div>
                     <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
                       <div className="flex items-center gap-2">
@@ -114,4 +116,16 @@ export default function CartPage() {
       </div>
     </div>
   )
+}
+
+function lineDetails(length: string, hairType?: keyof typeof HAIR_TYPE_LABELS) {
+  const parts = [
+    length && length !== 'default'
+      ? isLengthOption(parseLengthOption(length))
+        ? `${parseLengthOption(length)}"`
+        : length
+      : null,
+    hairType ? HAIR_TYPE_LABELS[hairType] : null,
+  ].filter(Boolean)
+  return parts.join(' · ')
 }

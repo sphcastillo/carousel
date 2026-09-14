@@ -122,6 +122,11 @@ export const testimonialsBlockType = defineType({
   type: 'object',
   icon: BlockElementIcon,
   fields: [
+    defineField({
+      name: 'eyebrow',
+      type: 'string',
+      description: 'Small kicker above the heading, e.g. “Testimonials”.',
+    }),
     defineField({name: 'heading', type: 'string'}),
     defineField({
       name: 'testimonials',
@@ -130,9 +135,9 @@ export const testimonialsBlockType = defineType({
     }),
   ],
   preview: {
-    select: {title: 'heading'},
-    prepare({title}) {
-      return {title: title || 'Testimonials', subtitle: 'Testimonials'}
+    select: {title: 'heading', subtitle: 'eyebrow'},
+    prepare({title, subtitle}) {
+      return {title: title || 'Testimonials', subtitle: subtitle || 'Testimonials'}
     },
   },
 })

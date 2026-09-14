@@ -435,6 +435,7 @@ async function run() {
       {
         _type: 'testimonialsBlock',
         _key: key(),
+        eyebrow: 'Testimonials',
         heading: 'Notes from the girls',
         testimonials: testimonials.map((item) => ({_type: 'reference', _key: key(), _ref: item._id})),
       },

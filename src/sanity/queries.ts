@@ -12,24 +12,40 @@ const imageProjection = /* groq */ `
   crop
 `
 
+const shopifyVariantProjection = /* groq */ `
+  "_key": _id,
+  "length": select(
+    store.option1 == "Default Title" => null,
+    store.option1 == "18 inches" => "18",
+    store.option1 == "20 inches" => "20",
+    store.option1 == "22 inches" => "22",
+    defined(store.option1) && store.option1 != "" => store.option1,
+    null
+  ),
+  "hairType": select(
+    defined(store.option2) && store.option2 != "" => store.option2,
+    null
+  ),
+  "price": store.price,
+  "compareAtPrice": store.compareAtPrice,
+  "inStock": store.inventory.isAvailable,
+  "sku": store.sku,
+  "shopifyVariantId": store.gid
+`
+
 const productCardProjection = /* groq */ `
   _id,
-  name,
-  "slug": slug.current,
+  "name": store.title,
+  "slug": store.slug.current,
+  "href": "/shop/" + store.slug.current,
   shortPitch,
   featured,
-  shopifyProductId,
-  gallery[0]{${imageProjection}},
-  variants[]{
-    _key,
-    length,
-    hairType,
-    price,
-    compareAtPrice,
-    sku,
-    inStock,
-    shopifyVariantId
-  }
+  "shopifyProductId": store.gid,
+  "gallery": gallery[0]{${imageProjection}},
+  "imageUrl": select(defined(gallery[0].asset) => null, store.previewImageUrl),
+  "imageAlt": store.title,
+  "currencyCode": "USD",
+  "variants": store.variants[]->{${shopifyVariantProjection}}
 `
 
 export const SITE_SETTINGS_QUERY = defineQuery(/* groq */ `
@@ -102,7 +118,13 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
         image{${imageProjection}}
       },
       _type == "testimonialsBlock" => {
-        testimonials[]->{
+        "testimonials": array::compact(testimonials[]->{
+          _id,
+          quote,
+          name,
+          role,
+          photo{${imageProjection}}
+        }) + *[_type == "testimonial" && !(_id in ^.testimonials[]._ref)] | order(_createdAt asc) {
           _id,
           quote,
           name,
@@ -159,45 +181,53 @@ export const CONTACT_PAGE_QUERY = defineQuery(/* groq */ `
 `)
 
 export const PRODUCTS_QUERY = defineQuery(/* groq */ `
-  *[_type == "product" && defined(slug.current)] | order(name asc) {
+  *[
+    _type == "product" &&
+    defined(store.gid) &&
+    store.status == "active" &&
+    store.isDeleted != true
+  ] | order(store.title asc) {
     ${productCardProjection}
   }
 `)
 
 export const COLLECTIONS_QUERY = defineQuery(/* groq */ `
-  *[_type == "collection" && defined(slug.current)] | order(title asc) {
+  *[_type == "collection" && defined(coalesce(slug.current, store.slug.current))] | order(coalesce(title, store.title) asc) {
     _id,
-    title,
-    "slug": slug.current,
+    "title": coalesce(title, store.title),
+    "slug": coalesce(slug.current, store.slug.current),
     description,
     products[]->{${productCardProjection}}
   }
 `)
 
 export const PRODUCT_SLUGS_QUERY = defineQuery(/* groq */ `
-  *[_type == "product" && defined(slug.current)]{ "slug": slug.current }
+  *[
+    _type == "product" &&
+    defined(store.slug.current) &&
+    store.status == "active" &&
+    store.isDeleted != true
+  ]{ "slug": store.slug.current }
 `)
 
 export const PRODUCT_QUERY = defineQuery(/* groq */ `
-  *[_type == "product" && slug.current == $slug][0]{
+  *[
+    _type == "product" &&
+    store.slug.current == $slug &&
+    store.status == "active" &&
+    store.isDeleted != true
+  ][0]{
     _id,
-    name,
-    "slug": slug.current,
+    "name": store.title,
+    "slug": store.slug.current,
     shortPitch,
     description,
     featured,
-    shopifyProductId,
+    "shopifyProductId": store.gid,
+    "previewImageUrl": store.previewImageUrl,
+    "optionName": store.options[0].name,
     gallery[]{${imageProjection}},
-    variants[]{
-      _key,
-      length,
-      hairType,
-      price,
-      compareAtPrice,
-      sku,
-      inStock,
-      shopifyVariantId
-    },
+    "variants": store.variants[]->{${shopifyVariantProjection}},
     seo
   }
 `)
