@@ -175,6 +175,7 @@ export const CONTACT_PAGE_QUERY = defineQuery(/* groq */ `
     title,
     eyebrow,
     headline,
+    portrait{${imageProjection}},
     intro,
     note,
     seo

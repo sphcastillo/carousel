@@ -1,3 +1,5 @@
+import {readFile} from 'node:fs/promises'
+import path from 'node:path'
 import {getCliClient} from 'sanity/cli'
 
 function key() {
@@ -25,6 +27,16 @@ async function uploadImage(url: string, filename: string, alt: string) {
   return {
     _type: 'altImage' as const,
     _key: key(),
+    asset: {_type: 'reference' as const, _ref: asset._id},
+    alt,
+  }
+}
+
+async function uploadLocalImage(filePath: string, filename: string, alt: string) {
+  const buffer = await readFile(filePath)
+  const asset = await client.assets.upload('image', buffer, {filename, contentType: 'image/jpeg'})
+  return {
+    _type: 'altImage' as const,
     asset: {_type: 'reference' as const, _ref: asset._id},
     alt,
   }
@@ -488,17 +500,22 @@ async function run() {
         ],
       },
     ],
-    moments: portraits.slice(0, 3),
+    moments: portraits.slice(0, 4),
   })
 
   await client.createOrReplace({
     _id: 'contactPage',
     _type: 'contactPage',
     title: 'Contact',
-    eyebrow: 'a note from the vanity',
-    headline: 'Write the studio',
+    eyebrow: 'A note from me',
+    headline: 'Hello, love',
+    portrait: await uploadLocalImage(
+      path.join(process.cwd(), '..', 'public', 'images', 'breanna-contact.jpg'),
+      'breanna-contact.jpg',
+      'Breanna, founder of Carousel Hair Extensions, reclining in a cherry-print dress',
+    ),
     intro:
-      'Fittings, color questions, and custom bows — send a note. The contact details live in Site Settings so they stay in one pretty place.',
+      "I'm so glad you're here. Custom pieces are my favorite part of this work — a color that's only yours, a length that feels just right, a texture you've been dreaming about, or something no one's worn before.\n\nTell me what you're imagining. I read every note myself, and I'll write you back as soon as I can.",
     note: [
       {
         _type: 'block',
@@ -510,7 +527,7 @@ async function run() {
             _type: 'span',
             _key: key(),
             marks: [],
-            text: 'Private appointments are Tuesday through Saturday. If you are sending a vanity-bag order, include your preferred length and a photo in natural light.',
+            text: "If you'd like a private appointment, I'm here Tuesday through Saturday. Sending a vanity-bag order? Include your preferred length and a photo in natural light so I can really see you.",
           },
         ],
       },

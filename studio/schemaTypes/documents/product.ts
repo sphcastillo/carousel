@@ -1,6 +1,16 @@
 import {BasketIcon} from '@sanity/icons'
 import {defineArrayMember, defineField, defineType} from 'sanity'
 
+export const PRODUCT_CATEGORIES = [
+  {title: 'Carousel Ponytail', value: 'ponytail'},
+  {title: 'Carousel Crown', value: 'crown'},
+  {title: 'Carousel Merchandise', value: 'merchandise'},
+] as const
+
+const CATEGORY_LABELS: Record<string, string> = Object.fromEntries(
+  PRODUCT_CATEGORIES.map((category) => [category.value, category.title]),
+)
+
 export const productType = defineType({
   name: 'product',
   title: 'Product',
@@ -135,6 +145,17 @@ export const productType = defineType({
 
     // Editable Carousel content
     defineField({
+      name: 'category',
+      title: 'Category',
+      type: 'string',
+      description: 'Each product is a ponytail, a crown, or merchandise.',
+      options: {
+        list: [...PRODUCT_CATEGORIES],
+        layout: 'radio',
+      },
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
       name: 'shortPitch',
       type: 'string',
       description: 'A short merchandising line for cards and carousels.',
@@ -168,13 +189,15 @@ export const productType = defineType({
   preview: {
     select: {
       title: 'store.title',
+      category: 'category',
       productType: 'store.productType',
       status: 'store.status',
       price: 'store.priceRange.minVariantPrice',
       media: 'gallery.0',
     },
-    prepare({title, productType, status, price, media}) {
+    prepare({title, category, productType, status, price, media}) {
       const details = [
+        category ? CATEGORY_LABELS[category] : undefined,
         productType,
         typeof price === 'number' ? `$${price}` : undefined,
         status,

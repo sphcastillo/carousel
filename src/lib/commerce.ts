@@ -47,15 +47,6 @@ export function createLineId(productId: string, length: string, hairType?: strin
   return `${productId}:${length}:${hairType || 'default'}`
 }
 
-/** Swap this later for a Shopify Storefront API cart create / checkout URL. */
-export function getCheckoutAction(): {kind: 'coming-soon'; href: string; label: string} {
-  return {
-    kind: 'coming-soon',
-    href: '/contact?intent=order',
-    label: 'Request this order',
-  }
-}
-
 export function formatMoney(value: number) {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',

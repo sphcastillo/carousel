@@ -14,41 +14,55 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function AboutPage() {
   const {data} = await sanityFetch({query: ABOUT_PAGE_QUERY})
+  const moments = data?.moments?.filter((moment) => moment?.asset).slice(0, 4) ?? []
 
   return (
     <div>
-      <section className="relative min-h-[62vh] overflow-hidden">
-        {data?.heroImage ? (
-          <SanityImage image={data.heroImage} fill className="object-cover" sizes="100vw" priority />
-        ) : (
-          <div className="absolute inset-0 bg-primary" />
-        )}
-        <div className="absolute inset-0 bg-ink/45" />
-        <div className="relative mx-auto flex min-h-[62vh] max-w-6xl items-end px-4 pb-16 md:px-8">
-          <div>
-            <p className="mb-3.5 font-mono text-[10px] tracking-[0.19em] text-secondary uppercase">
-              {data?.eyebrow || 'The world'}
-            </p>
-            <h1 className="mt-3 font-display text-6xl leading-[0.78] tracking-[-0.04em] text-canvas md:text-8xl">
-              {data?.headline || data?.title || 'About Carousel'}
-            </h1>
-          </div>
-        </div>
+      <section className="mx-auto max-w-6xl px-5 pt-16 md:px-8 md:pt-20">
+        <p className="mb-3.5 font-mono text-[10px] tracking-[0.19em] uppercase">
+          {data?.eyebrow || 'The world'}
+        </p>
+        <h1 className="max-w-4xl font-display text-6xl leading-[0.78] tracking-[-0.04em] md:text-8xl">
+          {data?.headline || data?.title || 'About Carousel'}
+        </h1>
       </section>
-      <section className="mx-auto max-w-2xl px-4 py-20 md:px-8">
+
+      {data?.heroImage?.asset ? (
+        <section className="mx-auto max-w-6xl px-5 pt-8 md:px-8 md:pt-10">
+          <figure className="overflow-hidden">
+            <SanityImage
+              image={data.heroImage}
+              alt={data.headline || data.title || 'About Carousel'}
+              className="h-auto max-h-[36rem] w-full object-cover object-center"
+              sizes="(min-width: 1152px) 1100px, calc(100vw - 2.5rem)"
+              srcWidth={2400}
+              quality={90}
+              fit="max"
+              priority
+            />
+          </figure>
+        </section>
+      ) : null}
+
+      <section className="mx-auto max-w-2xl px-5 py-16 md:px-8 md:py-20">
         <RichText value={data?.story} />
       </section>
-      {data?.moments && data.moments.length > 0 ? (
-        <section className="mx-auto grid max-w-6xl gap-5 px-4 pb-24 sm:grid-cols-3 md:px-8">
-          {data.moments.map((moment, index) => (
-            <figure
-              key={index}
-              className={`border border-primary/18 bg-surface p-[0.55rem] pb-[0.7rem] ${index === 1 ? 'sm:mt-10' : ''}`}
-            >
-              <SanityImage image={moment} className="h-full w-full object-cover" sizes="30vw" />
-              <figcaption className="mt-[0.55rem] font-mono text-[0.58rem] tracking-[0.16em] text-ink/62 uppercase">
-                Photo figure / {String(index + 1).padStart(2, '0')}
-              </figcaption>
+
+      {moments.length > 0 ? (
+        <section className="mx-auto grid max-w-6xl grid-cols-2 gap-3 px-5 pb-24 md:gap-5 md:px-8 gallery:grid-cols-4">
+          {moments.map((moment, index) => (
+            <figure key={moment.asset?._id || index}>
+              <div className="relative aspect-[3/4] overflow-hidden">
+                <SanityImage
+                  image={moment}
+                  fill
+                  fit="crop"
+                  className="object-cover"
+                  sizes="(min-width: 925px) 25vw, 50vw"
+                  srcWidth={1400}
+                  quality={90}
+                />
+              </div>
             </figure>
           ))}
         </section>

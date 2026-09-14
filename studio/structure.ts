@@ -10,6 +10,7 @@ import {
   TagIcon,
   UsersIcon,
 } from '@sanity/icons'
+import {PRODUCT_CATEGORIES} from './schemaTypes/documents/product'
 
 const SINGLETONS = ['siteSettings', 'homePage', 'aboutPage', 'contactPage']
 
@@ -35,7 +36,29 @@ export const structure: StructureResolver = (S) =>
         .icon(EnvelopeIcon)
         .child(S.document().schemaType('contactPage').documentId('contactPage')),
       S.divider(),
-      S.documentTypeListItem('product').title('Products').icon(BasketIcon),
+      S.listItem()
+        .title('Products')
+        .icon(BasketIcon)
+        .child(
+          S.list()
+            .title('Products')
+            .items([
+              S.listItem()
+                .title('All products')
+                .icon(BasketIcon)
+                .child(S.documentTypeList('product').title('All products')),
+              ...PRODUCT_CATEGORIES.map((category) =>
+                S.listItem()
+                  .title(category.title)
+                  .child(
+                    S.documentTypeList('product')
+                      .title(category.title)
+                      .filter('_type == "product" && category == $category')
+                      .params({category: category.value}),
+                  ),
+              ),
+            ]),
+        ),
       S.documentTypeListItem('collection').title('Collections').icon(TagIcon),
       S.divider(),
       S.documentTypeListItem('testimonial').title('Testimonials').icon(HeartIcon),

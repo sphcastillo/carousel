@@ -2,7 +2,6 @@ import type {Metadata} from 'next'
 import {Cormorant_Garamond, DM_Mono, Italiana, Manrope} from 'next/font/google'
 import {VisualEditing} from 'next-sanity/visual-editing'
 import {draftMode} from 'next/headers'
-import {CartProvider} from '@/components/cart-provider'
 import {SiteHeader} from '@/components/site-header'
 import {SanityLive} from '@/sanity/live'
 import { Footer } from '@/components/Footer'
@@ -54,11 +53,9 @@ export default async function RootLayout({
       className={`${manrope.variable} ${italiana.variable} ${dmMono.variable} ${cormorant.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-canvas font-sans text-ink">
-        <CartProvider>
-          <SiteHeader />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </CartProvider>
+        <SiteHeader />
+        <main className="flex-1">{children}</main>
+        <Footer />
         <SanityLive />
         {isDraftMode ? <VisualEditing /> : null}
       </body>

@@ -30,6 +30,8 @@ export const aboutPageType = defineType({
       title: 'Founder moments',
       type: 'array',
       of: [defineArrayMember({type: 'altImage'})],
+      description: 'Up to four photos in the gallery grid.',
+      validation: (rule) => rule.max(4),
     }),
     defineField({
       name: 'seo',

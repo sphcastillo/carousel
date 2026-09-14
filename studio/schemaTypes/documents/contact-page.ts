@@ -15,6 +15,12 @@ export const contactPageType = defineType({
     }),
     defineField({name: 'eyebrow', type: 'string'}),
     defineField({name: 'headline', type: 'string'}),
+    defineField({
+      name: 'portrait',
+      title: 'Portrait',
+      type: 'altImage',
+      description: 'Shown beside the contact note. Use the hotspot to keep the face in frame.',
+    }),
     defineField({name: 'intro', type: 'text', rows: 4}),
     defineField({
       name: 'note',
@@ -27,4 +33,7 @@ export const contactPageType = defineType({
       type: 'seo',
     }),
   ],
+  preview: {
+    select: {title: 'title', subtitle: 'headline', media: 'portrait'},
+  },
 })
