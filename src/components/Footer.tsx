@@ -39,7 +39,7 @@ export async function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col gap-4 border-t border-ink/18 pt-4 font-mono text-[9px] tracking-[0.18em] text-ink/55 uppercase md:mt-16 md:grid md:grid-cols-3 md:items-center md:gap-4">
-          <p>
+          <p className="order-3 md:order-1">
             Site by{' '}
             <a
               href="https://www.builtbysophia.com"
@@ -50,7 +50,7 @@ export async function Footer() {
               Built By Sophia
             </a>
           </p>
-          <nav aria-label="Social media" className="flex items-center gap-5 md:justify-center">
+          <nav aria-label="Social media" className="order-1 flex items-center gap-5 md:order-2 md:justify-center">
             {SOCIALS.map((social) => (
               <a
                 key={social.label}
@@ -63,7 +63,7 @@ export async function Footer() {
               </a>
             ))}
           </nav>
-          <p className="md:text-right">
+          <p className="order-2 md:order-3 md:text-right">
             © {year} {data?.siteTitle}
           </p>
         </div>
