@@ -67,9 +67,9 @@ export function EditorialSplit({
         {hasPanel || image?.asset ? (
           <div className="overflow-hidden bg-secondary">
 
-            <div className="grid min-h-[min(88vh,54rem)] md:grid-cols-[minmax(17rem,0.4fr)_minmax(0,0.6fr)]">
+            <div className="grid md:min-h-[min(88vh,54rem)] md:grid-cols-[minmax(17rem,0.4fr)_minmax(0,0.6fr)]">
               {hasPanel ? (
-                <div className="flex min-h-128 flex-col justify-between bg-secondary px-[1.6rem] pt-[2.6rem] pb-[2.35rem] text-ink md:min-h-0 md:px-[2.4rem] md:pt-[3.1rem] md:pb-[2.7rem]">
+                <div className="flex flex-col gap-8 bg-secondary px-[1.6rem] pt-[2.6rem] pb-[2.35rem] text-ink md:min-h-0 md:justify-between md:gap-0 md:px-[2.4rem] md:pt-[3.1rem] md:pb-[2.7rem]">
                   <div>
                     {block.panelEyebrow ? (
                       <p className="mb-4 font-mono text-[0.58rem] tracking-[0.2em] text-ink/62 uppercase">
@@ -82,7 +82,7 @@ export function EditorialSplit({
                       </h3>
                     ) : null}
                   </div>
-                  <div className="max-w-66 pt-18">
+                  <div className="max-w-66 md:pt-18">
                     {block.panelSubcopy ? (
                       <p className="mb-6 text-[0.86rem] leading-[1.55] text-ink/78">{block.panelSubcopy}</p>
                     ) : null}
