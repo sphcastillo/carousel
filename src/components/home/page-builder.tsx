@@ -88,8 +88,10 @@ export function PageBuilder({
               />
             )
           case 'videoMoment': {
-            const poster = block.poster as {asset?: unknown} | undefined
-            const posterUrl = poster?.asset ? urlFor(poster as never).width(1600).url() : undefined
+            const poster = block.poster as {asset?: {_id?: string} | null} | undefined
+            const posterUrl = poster?.asset
+              ? `${urlFor(poster as never).width(1600).url()}${poster.asset._id ? `&v=${encodeURIComponent(poster.asset._id)}` : ''}`
+              : undefined
             return (
               <VideoMaskScroll
                 key={key}

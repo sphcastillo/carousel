@@ -33,7 +33,7 @@ export default async function AboutPage() {
             <SanityImage
               image={data.heroImage}
               alt={data.headline || data.title || 'About Carousel'}
-              className="h-auto max-h-[36rem] w-full object-cover object-center"
+              className="h-auto max-h-144 w-full object-cover object-center"
               sizes="(min-width: 1152px) 1100px, calc(100vw - 2.5rem)"
               srcWidth={2400}
               quality={90}

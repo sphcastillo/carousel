@@ -4,6 +4,8 @@ import {sanityFetch} from '@/sanity/live'
 import {HOME_PAGE_QUERY, SITE_SETTINGS_QUERY} from '@/sanity/queries'
 import {getCarouselFavorites, getCarouselPonytails} from '@/lib/shopify'
 
+export const revalidate = 60
+
 export async function generateMetadata(): Promise<Metadata> {
   const {data} = await sanityFetch({query: HOME_PAGE_QUERY})
   return {

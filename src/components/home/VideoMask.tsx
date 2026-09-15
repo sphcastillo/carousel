@@ -1,6 +1,7 @@
 import {parseVideoUrl} from '@/lib/video'
+import {AutoplayVideo} from './autoplay-video'
 
-const CAROUSEL_FILM = '/videos/CarouselExtensions.mp4'
+const CAROUSEL_FILM = '/videos/CarouselExtensions.mp4?v=faststart'
 
 export function VideoMaskScroll({
   eyebrow,
@@ -33,14 +34,11 @@ export function VideoMaskScroll({
       ) : null}
       <div className="mx-auto aspect-video w-full max-w-6xl overflow-hidden bg-ink">
         {parsed.kind === 'file' ? (
-          <video
+          <AutoplayVideo
+            key={posterUrl || parsed.src}
             className="h-full w-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            poster={posterUrl || undefined}
             src={parsed.src}
+            poster={posterUrl || undefined}
           />
         ) : (
           <iframe

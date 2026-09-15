@@ -54,7 +54,7 @@ export default async function ProductPage({
   return (
     <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-2 md:px-8">
       <div className="space-y-4">
-        <div className="border border-primary/18 bg-surface p-[0.55rem] pb-[0.7rem]">
+        <div className="border border-black bg-surface p-px">
           <div className="relative aspect-4/5 overflow-hidden bg-secondary/30">
             {hero ? (
               <SanityImage image={hero} fill className="object-cover" sizes="50vw" priority />
