@@ -44,7 +44,7 @@ export function FeaturedIn({
 
   return (
     <section className="overflow-hidden border-y border-ink/10 bg-canvas py-5 md:py-6">
-      <div className="flex items-center gap-6 px-6 md:gap-10 md:px-10">
+      <div className="flex items-center gap-6 px-3 sm:px-6 md:gap-10 md:px-10">
         {heading ? (
           <p className="shrink-0 font-mono text-[9px] tracking-[0.22em] text-ink/55 uppercase">
             {heading}

@@ -158,6 +158,29 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `
   }
 `)
 
+export const ACTIVE_WEBSITE_CAMPAIGN_QUERY = defineQuery(/* groq */ `
+  *[
+    _type == "websiteCampaign" &&
+    status == "active" &&
+    (!defined(startsAt) || dateTime(startsAt) <= dateTime(now())) &&
+    (!defined(endsAt) || dateTime(endsAt) >= dateTime(now()))
+  ] | order(coalesce(startsAt, _createdAt) desc)[0]{
+    _id,
+    _updatedAt,
+    title,
+    image{${imageProjection}},
+    eyebrow,
+    heading,
+    body,
+    cta{
+      label,
+      linkType,
+      internalPath,
+      externalUrl
+    }
+  }
+`)
+
 export const ABOUT_PAGE_QUERY = defineQuery(/* groq */ `
   *[_id == "aboutPage"][0]{
     title,

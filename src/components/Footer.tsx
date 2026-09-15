@@ -18,7 +18,7 @@ export async function Footer() {
             Carousel Hair Extensions
           </Link>
           {data?.footerBlurb ? (
-            <p className="max-w-64 text-[0.86rem] leading-[1.55] text-ink/78 md:mb-3 md:text-right">
+            <p className="whitespace-nowrap text-[0.86rem] leading-[1.55] text-ink/78 md:mb-3 md:text-right">
               {data.footerBlurb}
             </p>
           ) : null}

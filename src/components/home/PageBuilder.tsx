@@ -3,7 +3,7 @@ import {ProductCarousel} from '@/components/ProductCarousel'
 import type {ProductCardProduct} from '@/components/ProductCard'
 import {BrandStatement} from './brand-statement'
 import {EditorialSplit} from './EditorialSplit'
-import {FeaturedIn} from './featured-in'
+import {FeaturedIn} from './FeaturedIn'
 
 import {InstagramStrip} from './InstagramStrip'
 import {PortraitGallery} from './PortraitGallery'

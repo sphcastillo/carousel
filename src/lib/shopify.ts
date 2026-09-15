@@ -45,6 +45,18 @@ export function getCarouselPonytails() {
   )
 }
 
+export function getHalloweenEdit() {
+  return getShopifyCollection(
+    process.env.SHOPIFY_HALLOWEEN_COLLECTION_HANDLE || 'the-halloween-edit',
+  )
+}
+
+export function getMerchandiseBesidesHalloween() {
+  return getShopifyCollection(
+    process.env.SHOPIFY_MERCHANDISE_COLLECTION_HANDLE || 'merchandise-besides-halloween',
+  )
+}
+
 type CheckoutLine = Pick<CartLine, 'shopifyVariantId' | 'quantity' | 'name'>
 
 export async function createShopifyCheckout(

@@ -1,6 +1,7 @@
 import type {Metadata} from 'next'
 import {ProductCard} from '@/components/ProductCard'
 import {SHOP_CATEGORIES} from '@/lib/product-categories'
+import {getHalloweenEdit, getMerchandiseBesidesHalloween} from '@/lib/shopify'
 import {sanityFetch} from '@/sanity/live'
 import {PRODUCTS_QUERY} from '@/sanity/queries'
 
@@ -10,12 +11,28 @@ export const metadata: Metadata = {
 }
 
 export default async function ShopPage() {
-  const {data: products} = await sanityFetch({query: PRODUCTS_QUERY})
+  const [{data: products}, halloweenProducts, merchandiseProducts] = await Promise.all([
+    sanityFetch({query: PRODUCTS_QUERY}),
+    getHalloweenEdit(),
+    getMerchandiseBesidesHalloween(),
+  ])
   const list = products || []
-  const sections = SHOP_CATEGORIES.map((category) => ({
-    ...category,
-    products: list.filter((product) => String(product.category || '') === category.value),
-  })).filter((section) => section.products.length > 0)
+  const sections = [
+    ...SHOP_CATEGORIES.filter((category) => category.value !== 'merchandise').map((category) => ({
+      ...category,
+      products: list.filter((product) => String(product.category || '') === category.value),
+    })),
+    {
+      value: 'halloween',
+      title: 'The Halloween Edit',
+      products: halloweenProducts,
+    },
+    {
+      value: 'merchandise',
+      title: 'Carousel Merchandise',
+      products: merchandiseProducts,
+    },
+  ].filter((section) => section.products.length > 0)
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-20 md:px-8">

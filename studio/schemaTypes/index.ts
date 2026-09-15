@@ -25,6 +25,8 @@ import {collectionType} from './documents/collection'
 import {testimonialType} from './documents/testimonial'
 import {pressFeatureType} from './documents/press-feature'
 import {instagramPostType} from './documents/instagram-post'
+import {websiteCampaignType} from './documents/website-campaign'
+import {emailCampaignType} from './documents/email-campaign'
 
 export const schemaTypes = [
   seoType,
@@ -52,4 +54,6 @@ export const schemaTypes = [
   testimonialType,
   pressFeatureType,
   instagramPostType,
+  websiteCampaignType,
+  emailCampaignType,
 ]

@@ -1,6 +1,7 @@
 import type {StructureResolver} from 'sanity/structure'
 import {
   BasketIcon,
+  CalendarIcon,
   CogIcon,
   EnvelopeIcon,
   HeartIcon,
@@ -68,6 +69,19 @@ export const structure: StructureResolver = (S) =>
         (item) => item.getId() && !SINGLETONS.includes(item.getId() as string) &&
           !['product', 'collection', 'testimonial', 'pressFeature', 'instagramPost'].includes(
             item.getId() as string,
-          ),
+          ) &&
+          !['websiteCampaign', 'emailCampaign'].includes(item.getId() as string),
       ),
+      S.divider(),
+      S.listItem()
+        .title('Campaigns')
+        .icon(CalendarIcon)
+        .child(
+          S.list()
+            .title('Campaigns')
+            .items([
+              S.documentTypeListItem('emailCampaign').title('Emails').icon(EnvelopeIcon),
+              S.documentTypeListItem('websiteCampaign').title('Website Modals').icon(ImageIcon),
+            ]),
+        ),
     ])
