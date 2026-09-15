@@ -10,7 +10,7 @@ type Cta = {
   externalUrl?: string | null
 }
 
-export function HeroBlock({
+export function Hero({
   block,
 }: {
   block: {

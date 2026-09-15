@@ -27,6 +27,7 @@
   --breakpoint-gallery: 925px;
   --animate-marquee: marquee 28s linear infinite;
   --animate-product-marquee: marquee 110s linear infinite;
+  --animate-orb-wipe: orb-wipe 6.8s cubic-bezier(0.65, 0.05, 0.36, 1) infinite;
 }
 
 html,
@@ -49,5 +50,20 @@ body {
   }
   to {
     transform: translateX(-50%);
+  }
+}
+
+@keyframes orb-wipe {
+  0%,
+  10% {
+    clip-path: circle(0% at 78% 86%);
+  }
+  38%,
+  62% {
+    clip-path: circle(150% at 50% 50%);
+  }
+  90%,
+  100% {
+    clip-path: circle(0% at 18% 12%);
   }
 }

@@ -4,12 +4,13 @@ import type {ProductCardProduct} from '@/components/ProductCard'
 import {BrandStatement} from './brand-statement'
 import {EditorialSplit} from './EditorialSplit'
 import {FeaturedIn} from './featured-in'
-import {HeroBlock} from './hero'
+
 import {InstagramStrip} from './InstagramStrip'
 import {PortraitGallery} from './PortraitGallery'
 import {VideoMaskScroll} from './VideoMask'
 import {urlFor} from '@/sanity/image'
 import { Testimonials } from '../Testimonials'
+import { Hero } from '../Hero'
 
 const FAVORITES_SLUGS = ['carousel-favorites', 'bestsellers']
 const PONYTAILS_SLUGS = ['carousel-ponytails']
@@ -45,7 +46,7 @@ export function PageBuilder({
         const key = String(block._key || block._type)
         switch (block._type) {
           case 'hero':
-            return <HeroBlock key={key} block={block} />
+            return <Hero key={key} block={block} />
           case 'brandStatement':
             return <BrandStatement key={key} block={block} />
           case 'featuredIn':

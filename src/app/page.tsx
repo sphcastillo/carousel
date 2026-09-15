@@ -1,5 +1,5 @@
 import type {Metadata} from 'next'
-import {PageBuilder} from '@/components/home/page-builder'
+import {PageBuilder} from '@/components/home/PageBuilder'
 import {sanityFetch} from '@/sanity/live'
 import {HOME_PAGE_QUERY, SITE_SETTINGS_QUERY} from '@/sanity/queries'
 import {getCarouselFavorites, getCarouselPonytails} from '@/lib/shopify'

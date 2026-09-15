@@ -27,7 +27,9 @@ export function VideoMaskScroll({
             </p>
           ) : null}
           {heading ? (
-            <h2 className="font-display text-5xl leading-[0.78] tracking-[-0.04em] md:text-7xl">{heading}</h2>
+            <h2 className="font-display text-5xl leading-[0.78] tracking-[-0.04em] md:text-7xl">
+              {headingRows(heading)}
+            </h2>
           ) : null}
           {subcopy ? <p className="mt-5 max-w-xl text-sm leading-relaxed text-canvas/70">{subcopy}</p> : null}
         </div>
@@ -50,5 +52,19 @@ export function VideoMaskScroll({
         )}
       </div>
     </section>
+  )
+}
+
+function headingRows(value: string) {
+  const words = value.trim().split(/\s+/).filter(Boolean)
+  if (words.length < 2) return value
+
+  const mid = Math.ceil(words.length / 2)
+  return (
+    <>
+      {words.slice(0, mid).join(' ')}
+      <br />
+      {words.slice(mid).join(' ')}
+    </>
   )
 }

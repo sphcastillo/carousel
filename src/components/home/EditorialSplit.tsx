@@ -1,4 +1,3 @@
-import type {CSSProperties} from 'react'
 import Link from 'next/link'
 import {SanityImage} from '@/components/sanity-image'
 import {SHOP_PONYTAILS_HREF} from '@/lib/product-categories'
@@ -31,13 +30,7 @@ export function EditorialSplit({
   const ctaLabel = block.cta?.label
   const hasIntro = Boolean(block.eyebrow || block.heading || block.body)
   const hasPanel = Boolean(block.panelEyebrow || block.panelHeadline || block.panelSubcopy || ctaLabel)
-  const image = block.image as {
-    asset?: {metadata?: {dimensions?: {width?: number; height?: number} | null} | null}
-  } | undefined
-  const photoWidth = image?.asset?.metadata?.dimensions?.width
-  const photoHeight = image?.asset?.metadata?.dimensions?.height
-  const photoAspect =
-    photoWidth && photoHeight ? `${photoWidth} / ${photoHeight}` : '3 / 4'
+  const image = block.image as {asset?: unknown} | undefined
 
   if (!hasIntro && !hasPanel && !image?.asset) return null
 
@@ -97,27 +90,31 @@ export function EditorialSplit({
                     {ctaLabel ? (
                       <Link
                         href={href}
-                        className="grid size-[8.6rem] place-items-center rounded-full border border-ink text-center font-mono text-[0.62rem] leading-[1.35] tracking-[0.16em] text-ink uppercase transition hover:bg-ink hover:text-canvas"
+                        className="group relative grid size-[8.6rem] place-items-center overflow-hidden rounded-full border border-ink bg-ink text-center font-mono text-[0.62rem] leading-[1.35] tracking-[0.16em] text-secondary uppercase motion-reduce:bg-transparent motion-reduce:text-ink"
                       >
-                        <OrbLabel label={ctaLabel} />
+                        <span className="relative">
+                          <OrbLabel label={ctaLabel} />
+                        </span>
+                        <span
+                          aria-hidden
+                          className="absolute inset-0 grid place-items-center bg-secondary text-ink motion-safe:animate-orb-wipe motion-reduce:hidden group-hover:animate-none group-hover:[clip-path:circle(150%_at_50%_50%)]"
+                        >
+                          <OrbLabel label={ctaLabel} />
+                        </span>
                       </Link>
                     ) : null}
                   </div>
                 </div>
               ) : null}
               {image?.asset ? (
-                <div
-                  className="relative min-h-112 bg-[color-mix(in_srgb,var(--ink)_18%,var(--secondary))] min-[460px]:aspect-(--split-aspect) min-[460px]:min-h-0 sm:aspect-auto sm:h-full"
-                  style={{['--split-aspect']: photoAspect} as CSSProperties}
-                >
+                <div className="bg-[color-mix(in_srgb,var(--ink)_18%,var(--secondary))] sm:self-start">
                   <SanityImage
                     image={block.image}
                     alt={block.panelHeadline || block.heading || 'Carousel campaign'}
-                    fill
                     fit="max"
                     sizes="(min-width: 640px) 58vw, 100vw"
                     quality={90}
-                    className="object-cover object-center"
+                    className="h-auto w-full"
                   />
                 </div>
               ) : null}

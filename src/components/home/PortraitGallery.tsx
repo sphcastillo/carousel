@@ -42,7 +42,7 @@ export function PortraitGallery({
                 </p>
               ) : null}
               {block.heading ? (
-                <h2 className="font-display text-[clamp(4.4rem,11vw,8.4rem)] leading-[0.8] tracking-[-0.045em] text-ink">
+                <h2 className="font-display text-[clamp(4.4rem,11vw,7.5rem)] leading-[0.8] tracking-[-0.045em] text-ink">
                   {headingLines(block.heading)}
                 </h2>
               ) : null}
