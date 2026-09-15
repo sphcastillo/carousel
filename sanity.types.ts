@@ -342,6 +342,13 @@ export type SiteSettings = {
   _rev: string;
   siteTitle?: string;
   logo?: AltImage;
+  favicon?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
   footerBlurb?: string;
   announcement?: string;
   navigation?: Array<
@@ -356,6 +363,22 @@ export type SiteSettings = {
   instagramHandle?: string;
   instagramUrl?: string;
   seo?: Seo;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
 };
 
 export type InstagramPostReference = {
@@ -573,22 +596,6 @@ export type ProductVariant = {
   };
 };
 
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
-};
-
 export type NavLink = {
   _type: "navLink";
   label?: string;
@@ -712,6 +719,8 @@ export type AllSanitySchemaTypes =
   | HomePage
   | PageBuilder
   | SiteSettings
+  | SanityImageCrop
+  | SanityImageHotspot
   | InstagramPostReference
   | InstagramStrip
   | VideoMoment
@@ -729,8 +738,6 @@ export type AllSanitySchemaTypes =
   | BrandStatement
   | Hero
   | ProductVariant
-  | SanityImageCrop
-  | SanityImageHotspot
   | NavLink
   | SanityImagePaletteSwatch
   | SanityImagePalette
@@ -743,11 +750,12 @@ export type AllSanitySchemaTypes =
 
 // Source: ../src/sanity/queries.ts
 // Variable: SITE_SETTINGS_QUERY
-// Query: *[_id == "siteSettings"][0]{    siteTitle,    logo{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop},    footerBlurb,    announcement,    navigation[]{      _key,      label,      linkType,      internalPath,      externalUrl    },    email,    phone,    address,    hours,    instagramHandle,    instagramUrl,    seo  }
+// Query: *[_id == "siteSettings"][0]{    siteTitle,    logo{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop},    favicon{  asset->{    _id,    url,    metadata { lqip, dimensions }  },  alt,  caption,  hotspot,  crop},    footerBlurb,    announcement,    navigation[]{      _key,      label,      linkType,      internalPath,      externalUrl    },    email,    phone,    address,    hours,    instagramHandle,    instagramUrl,    seo  }
 export type SITE_SETTINGS_QUERY_RESULT =
   | {
       siteTitle: null;
       logo: null;
+      favicon: null;
       footerBlurb: null;
       announcement: null;
       navigation: null;
@@ -762,6 +770,7 @@ export type SITE_SETTINGS_QUERY_RESULT =
   | {
       siteTitle: null;
       logo: null;
+      favicon: null;
       footerBlurb: null;
       announcement: null;
       navigation: null;
@@ -789,6 +798,7 @@ export type SITE_SETTINGS_QUERY_RESULT =
         hotspot: SanityImageHotspot | null;
         crop: SanityImageCrop | null;
       } | null;
+      favicon: null;
       footerBlurb: null;
       announcement: null;
       navigation: null;
@@ -813,6 +823,20 @@ export type SITE_SETTINGS_QUERY_RESULT =
         } | null;
         alt: string | null;
         caption: string | null;
+        hotspot: SanityImageHotspot | null;
+        crop: SanityImageCrop | null;
+      } | null;
+      favicon: {
+        asset: {
+          _id: string;
+          url: string | null;
+          metadata: {
+            lqip: string | null;
+            dimensions: SanityImageDimensions | null;
+          } | null;
+        } | null;
+        alt: null;
+        caption: null;
         hotspot: SanityImageHotspot | null;
         crop: SanityImageCrop | null;
       } | null;
@@ -1515,7 +1539,7 @@ export type PRODUCT_QUERY_RESULT = {
 // Query TypeMap
 declare global {
   interface SanityQueries {
-    '\n  *[_id == "siteSettings"][0]{\n    siteTitle,\n    logo{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n    footerBlurb,\n    announcement,\n    navigation[]{\n      _key,\n      label,\n      linkType,\n      internalPath,\n      externalUrl\n    },\n    email,\n    phone,\n    address,\n    hours,\n    instagramHandle,\n    instagramUrl,\n    seo\n  }\n': SITE_SETTINGS_QUERY_RESULT;
+    '\n  *[_id == "siteSettings"][0]{\n    siteTitle,\n    logo{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n    favicon{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n    footerBlurb,\n    announcement,\n    navigation[]{\n      _key,\n      label,\n      linkType,\n      internalPath,\n      externalUrl\n    },\n    email,\n    phone,\n    address,\n    hours,\n    instagramHandle,\n    instagramUrl,\n    seo\n  }\n': SITE_SETTINGS_QUERY_RESULT;
     '\n  *[_id == "homePage"][0]{\n    title,\n    seo,\n    pageBuilder[]{\n      _key,\n      _type,\n      ...,\n      _type == "hero" => {\n        image{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n        cta\n      },\n      _type == "brandStatement" => {\n        statement,\n        statementAccent\n      },\n      _type == "portraitGallery" => {\n        statement,\n        statementAccent,\n        eyebrow,\n        heading,\n        body,\n        portraits[]{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n}\n      },\n      _type == "editorialSplit" => {\n        eyebrow,\n        heading,\n        headingLine,\n        body,\n        chromeLeft,\n        chromeRight,\n        panelEyebrow,\n        panelHeadline,\n        panelSubcopy,\n        image{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n        cta\n      },\n      _type == "productCarousel" => {\n        "collectionSlug": coalesce(collection->store.slug.current, collection->slug.current),\n        "products": coalesce(\n          products[]->{\n  _id,\n  "name": store.title,\n  "slug": store.slug.current,\n  "href": "/shop/" + store.slug.current,\n  shortPitch,\n  featured,\n  "shopifyProductId": store.gid,\n  "gallery": gallery[0]{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n  "imageUrl": select(defined(gallery[0].asset) => null, store.previewImageUrl),\n  "imageAlt": store.title,\n  "currencyCode": "USD",\n  "variants": store.variants[]->{\n  "_key": _id,\n  "length": select(\n    store.option1 == "Default Title" => null,\n    store.option1 == "18 inches" => "18",\n    store.option1 == "20 inches" => "20",\n    store.option1 == "22 inches" => "22",\n    defined(store.option1) && store.option1 != "" => store.option1,\n    null\n  ),\n  "hairType": select(\n    defined(store.option2) && store.option2 != "" => store.option2,\n    null\n  ),\n  "price": store.price,\n  "compareAtPrice": store.compareAtPrice,\n  "inStock": store.inventory.isAvailable,\n  "sku": store.sku,\n  "shopifyVariantId": store.gid\n}\n},\n          collection->products[]->{\n  _id,\n  "name": store.title,\n  "slug": store.slug.current,\n  "href": "/shop/" + store.slug.current,\n  shortPitch,\n  featured,\n  "shopifyProductId": store.gid,\n  "gallery": gallery[0]{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n  "imageUrl": select(defined(gallery[0].asset) => null, store.previewImageUrl),\n  "imageAlt": store.title,\n  "currencyCode": "USD",\n  "variants": store.variants[]->{\n  "_key": _id,\n  "length": select(\n    store.option1 == "Default Title" => null,\n    store.option1 == "18 inches" => "18",\n    store.option1 == "20 inches" => "20",\n    store.option1 == "22 inches" => "22",\n    defined(store.option1) && store.option1 != "" => store.option1,\n    null\n  ),\n  "hairType": select(\n    defined(store.option2) && store.option2 != "" => store.option2,\n    null\n  ),\n  "price": store.price,\n  "compareAtPrice": store.compareAtPrice,\n  "inStock": store.inventory.isAvailable,\n  "sku": store.sku,\n  "shopifyVariantId": store.gid\n}\n}\n        )\n      },\n      _type == "personalCuration" => {\n        image{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n}\n      },\n      _type == "testimonialsBlock" => {\n        "testimonials": array::compact(testimonials[]->{\n          _id,\n          quote,\n          name,\n          role,\n          photo{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n}\n        }) + *[_type == "testimonial" && !(_id in ^.testimonials[]._ref)] | order(_createdAt asc) {\n          _id,\n          quote,\n          name,\n          role,\n          photo{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n}\n        }\n      },\n      _type == "featuredIn" => {\n        features[]->{\n          _id,\n          publication,\n          url,\n          logo{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n}\n        }\n      },\n      _type == "videoMoment" => {\n        poster{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n}\n      },\n      _type == "instagramStrip" => {\n        posts[]->{\n          _id,\n          kind,\n          label,\n          caption,\n          permalink,\n          image{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n}\n        }\n      }\n    }\n  }\n': HOME_PAGE_QUERY_RESULT;
     '\n  *[\n    _type == "websiteCampaign" &&\n    status == "active" &&\n    (!defined(startsAt) || dateTime(startsAt) <= dateTime(now())) &&\n    (!defined(endsAt) || dateTime(endsAt) >= dateTime(now()))\n  ] | order(coalesce(startsAt, _createdAt) desc)[0]{\n    _id,\n    _updatedAt,\n    title,\n    image{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n    eyebrow,\n    heading,\n    body,\n    cta{\n      label,\n      linkType,\n      internalPath,\n      externalUrl\n    }\n  }\n': ACTIVE_WEBSITE_CAMPAIGN_QUERY_RESULT;
     '\n  *[_id == "aboutPage"][0]{\n    title,\n    eyebrow,\n    headline,\n    heroImage{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n    story,\n    moments[]{\n  asset->{\n    _id,\n    url,\n    metadata { lqip, dimensions }\n  },\n  alt,\n  caption,\n  hotspot,\n  crop\n},\n    seo\n  }\n': ABOUT_PAGE_QUERY_RESULT;

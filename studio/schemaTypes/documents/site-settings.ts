@@ -26,6 +26,15 @@ export const siteSettingsType = defineType({
       group: 'brand',
     }),
     defineField({
+      name: 'favicon',
+      title: 'Browser favicon',
+      type: 'image',
+      group: 'brand',
+      description:
+        'Upload a square PNG or JPG. At least 512 × 512 pixels is recommended for a crisp browser icon.',
+      options: {hotspot: true},
+    }),
+    defineField({
       name: 'footerBlurb',
       type: 'text',
       rows: 3,

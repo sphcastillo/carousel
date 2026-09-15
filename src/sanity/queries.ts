@@ -52,6 +52,7 @@ export const SITE_SETTINGS_QUERY = defineQuery(/* groq */ `
   *[_id == "siteSettings"][0]{
     siteTitle,
     logo{${imageProjection}},
+    favicon{${imageProjection}},
     footerBlurb,
     announcement,
     navigation[]{
