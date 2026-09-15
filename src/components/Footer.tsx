@@ -1,21 +1,7 @@
 import Link from 'next/link'
+import {SOCIALS} from '@/lib/socials'
 import {sanityFetch} from '@/sanity/live'
 import {SITE_SETTINGS_QUERY} from '@/sanity/queries'
-
-const SOCIALS = [
-  {
-    label: 'Instagram',
-    href: 'https://www.instagram.com/_carouselhairextensions_/',
-  },
-  {
-    label: 'TikTok',
-    href: 'https://www.tiktok.com/@carouselhairextensions',
-  },
-  {
-    label: 'Facebook',
-    href: 'https://www.facebook.com/profile.php?id=100032460173579',
-  },
-] as const
 
 export async function Footer() {
   const {data} = await sanityFetch({query: SITE_SETTINGS_QUERY})

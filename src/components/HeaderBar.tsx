@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import {useState} from 'react'
 import {resolveHref} from '@/lib/links'
+import {SOCIALS} from '@/lib/socials'
 import {useCart} from './cart-provider'
 
 type NavItem = {
@@ -65,6 +66,11 @@ export function HeaderBar({
               onClick={() => setOpen(false)}
             />
           </nav>
+          <SocialLinks
+            className="mt-6 flex border-t border-canvas/20 pt-4"
+            linkClassName="font-mono text-[10px] tracking-[0.22em] uppercase text-canvas/80 transition hover:text-canvas"
+            onClick={() => setOpen(false)}
+          />
         </div>
       ) : null}
     </>
@@ -101,5 +107,32 @@ function NavLinks({
         )
       })}
     </>
+  )
+}
+
+function SocialLinks({
+  className,
+  linkClassName,
+  onClick,
+}: {
+  className?: string
+  linkClassName: string
+  onClick?: () => void
+}) {
+  return (
+    <nav aria-label="Social media" className={`items-center gap-4 ${className || ''}`}>
+      {SOCIALS.map((social) => (
+        <a
+          key={social.label}
+          href={social.href}
+          target="_blank"
+          rel="noreferrer"
+          className={linkClassName}
+          onClick={onClick}
+        >
+          {social.label}
+        </a>
+      ))}
+    </nav>
   )
 }

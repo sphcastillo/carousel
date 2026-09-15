@@ -49,16 +49,16 @@ export default async function AboutPage() {
       </section>
 
       {moments.length > 0 ? (
-        <section className="mx-auto grid max-w-6xl grid-cols-2 gap-3 px-5 pb-24 md:gap-5 md:px-8 gallery:grid-cols-4">
+        <section className="mx-auto grid max-w-6xl grid-cols-2 gap-3 px-5 pb-24 min-[540px]:grid-cols-4 md:gap-5 md:px-8">
           {moments.map((moment, index) => (
             <figure key={moment.asset?._id || index}>
-              <div className="relative aspect-[3/4] overflow-hidden">
+              <div className="relative aspect-3/4 overflow-hidden">
                 <SanityImage
                   image={moment}
                   fill
                   fit="crop"
                   className="object-cover"
-                  sizes="(min-width: 925px) 25vw, 50vw"
+                  sizes="(min-width: 540px) 25vw, 50vw"
                   srcWidth={1400}
                   quality={90}
                 />

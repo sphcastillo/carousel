@@ -84,11 +84,17 @@ export function Hero({
           ) : null}
           <Link
             href={href}
-            className="mt-8 inline-flex items-center justify-center rounded-full border border-canvas/80 px-[1.45rem] py-[0.85rem] font-mono text-[10px] tracking-[0.2em] text-canvas uppercase transition hover:bg-canvas hover:text-ink"
+            className="group relative mt-8 inline-grid place-items-center overflow-hidden rounded-full border border-canvas/80 bg-transparent px-[1.45rem] py-[0.85rem] text-center font-mono text-[10px] tracking-[0.2em] text-canvas uppercase"
             target={block.cta?.linkType === 'external' ? '_blank' : undefined}
             rel={block.cta?.linkType === 'external' ? 'noreferrer' : undefined}
           >
-            {label}
+            <span className="relative">{label}</span>
+            <span
+              aria-hidden
+              className="absolute inset-0 grid place-items-center bg-ink text-secondary motion-safe:animate-orb-wipe motion-reduce:hidden group-hover:animate-none group-hover:[clip-path:circle(150%_at_50%_50%)]"
+            >
+              {label}
+            </span>
           </Link>
         </div>
       </div>
