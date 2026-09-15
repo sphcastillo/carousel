@@ -6,6 +6,7 @@ import {RichText} from '@/components/rich-text'
 import {SanityImage} from '@/components/sanity-image'
 import {client} from '@/sanity/client'
 import {shopifySrc} from '@/lib/shopify-image'
+import {productCategoryLabel} from '@/lib/product-categories'
 import {urlFor} from '@/sanity/image'
 import {sanityFetch} from '@/sanity/live'
 import {PRODUCT_QUERY, PRODUCT_SLUGS_QUERY} from '@/sanity/queries'
@@ -50,20 +51,27 @@ export default async function ProductPage({
       ? shopifySrc(data.previewImageUrl)
       : undefined
   const optionLabel = data.optionName || 'Details'
+  const categoryLabel = productCategoryLabel(data.category)
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 md:grid-cols-2 md:px-8">
-      <div className="space-y-4">
+    <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 min-[480px]:py-12 sm:grid-cols-2 sm:items-start sm:gap-6 md:gap-10 md:px-8 md:py-16">
+      <div className="mx-auto w-full max-w-[22rem] space-y-4 min-[480px]:max-w-[26rem] sm:mx-0 sm:max-w-none">
         <div className="border border-black bg-surface p-px">
           <div className="relative aspect-4/5 overflow-hidden bg-secondary/30">
             {hero ? (
-              <SanityImage image={hero} fill className="object-cover" sizes="50vw" priority />
+              <SanityImage
+                image={hero}
+                fill
+                className="object-cover"
+                sizes="(min-width: 768px) 50vw, (min-width: 640px) 40vw, (min-width: 480px) 26rem, 100vw"
+                priority
+              />
             ) : data.previewImageUrl ? (
               <Image
                 src={shopifySrc(data.previewImageUrl)}
                 alt={data.name || ''}
                 fill
-                sizes="50vw"
+                sizes="(min-width: 768px) 50vw, (min-width: 640px) 40vw, (min-width: 480px) 26rem, 100vw"
                 quality={90}
                 className="object-cover"
                 priority
@@ -72,9 +80,9 @@ export default async function ProductPage({
           </div>
         </div>
         {gallery.length > 1 ? (
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-4 gap-2 sm:gap-3">
             {gallery.slice(1, 5).map((image, index) => (
-              <div key={index} className="border border-primary/18 bg-surface p-[0.55rem] pb-[0.7rem]">
+              <div key={index} className="overflow-hidden">
                 <div className="relative aspect-square overflow-hidden">
                   <SanityImage image={image} fill className="object-cover" sizes="15vw" />
                 </div>
@@ -83,11 +91,15 @@ export default async function ProductPage({
           </div>
         ) : null}
       </div>
-      <div>
-        <p className="mb-3.5 font-mono text-[10px] tracking-[0.19em] text-primary uppercase">
-          01 / {optionLabel}
-        </p>
-        <h1 className="font-display text-5xl leading-[0.78] tracking-[-0.04em] md:text-7xl">{data.name}</h1>
+      <div className="mx-auto w-full max-w-104 sm:max-w-none">
+        {categoryLabel ? (
+          <p className="mb-3.5 font-mono text-[10px] tracking-[0.19em] uppercase">
+            {categoryLabel}
+          </p>
+        ) : null}
+        <h1 className="max-w-[16ch] font-display text-[clamp(2.4rem,7vw,3.15rem)] leading-[0.86] tracking-[-0.04em] md:text-7xl">
+          {data.name}
+        </h1>
         {data.shortPitch ? <p className="mt-5 max-w-md text-sm leading-relaxed text-ink/70">{data.shortPitch}</p> : null}
         <ProductPurchase
           productId={data._id}
@@ -102,6 +114,10 @@ export default async function ProductPage({
         <div className="mt-10 max-w-xl text-ink/75">
           <RichText value={data.description} />
         </div>
+        <p className="mt-6 max-w-md text-xs leading-relaxed text-ink/60">
+          * Please note that while merchandise exchanges and returns are available within 30 days, hair
+          extension sales are final and non-refundable.
+        </p>
       </div>
     </div>
   )

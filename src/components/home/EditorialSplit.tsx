@@ -1,7 +1,7 @@
 import type {CSSProperties} from 'react'
 import Link from 'next/link'
 import {SanityImage} from '@/components/sanity-image'
-import {resolveHref} from '@/lib/links'
+import {SHOP_PONYTAILS_HREF} from '@/lib/product-categories'
 
 type Cta = {
   label?: string | null
@@ -27,9 +27,10 @@ export function EditorialSplit({
     image?: unknown
   }
 }) {
-  const href = resolveHref(block.cta)
+  const href = SHOP_PONYTAILS_HREF
+  const ctaLabel = block.cta?.label
   const hasIntro = Boolean(block.eyebrow || block.heading || block.body)
-  const hasPanel = Boolean(block.panelEyebrow || block.panelHeadline || block.panelSubcopy || href)
+  const hasPanel = Boolean(block.panelEyebrow || block.panelHeadline || block.panelSubcopy || ctaLabel)
   const image = block.image as {
     asset?: {metadata?: {dimensions?: {width?: number; height?: number} | null} | null}
   } | undefined
@@ -93,14 +94,12 @@ export function EditorialSplit({
                     {block.panelSubcopy ? (
                       <p className="mb-6 text-[0.86rem] leading-[1.55] text-ink/78">{block.panelSubcopy}</p>
                     ) : null}
-                    {href && block.cta?.label ? (
+                    {ctaLabel ? (
                       <Link
                         href={href}
                         className="grid size-[8.6rem] place-items-center rounded-full border border-ink text-center font-mono text-[0.62rem] leading-[1.35] tracking-[0.16em] text-ink uppercase transition hover:bg-ink hover:text-canvas"
-                        target={block.cta.linkType === 'external' ? '_blank' : undefined}
-                        rel={block.cta.linkType === 'external' ? 'noreferrer' : undefined}
                       >
-                        <OrbLabel label={block.cta.label} />
+                        <OrbLabel label={ctaLabel} />
                       </Link>
                     ) : null}
                   </div>

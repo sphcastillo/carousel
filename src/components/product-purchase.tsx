@@ -101,7 +101,7 @@ export function ProductPurchase({
       ) : null}
 
       <div className="flex items-end gap-3">
-        <p className="font-display text-4xl">{formatMoney(selected.price)}</p>
+        <p className="font-display text-[clamp(2rem,6vw,2.5rem)] md:text-4xl">{formatMoney(selected.price)}</p>
         {selected.compareAtPrice ? (
           <p className="pb-1 text-sm text-ink/45 line-through">{formatMoney(selected.compareAtPrice)}</p>
         ) : null}

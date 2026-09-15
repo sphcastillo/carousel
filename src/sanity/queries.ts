@@ -189,7 +189,8 @@ export const PRODUCTS_QUERY = defineQuery(/* groq */ `
     store.status == "active" &&
     store.isDeleted != true
   ] | order(store.title asc) {
-    ${productCardProjection}
+    ${productCardProjection},
+    category
   }
 `)
 
@@ -225,6 +226,7 @@ export const PRODUCT_QUERY = defineQuery(/* groq */ `
     shortPitch,
     description,
     featured,
+    category,
     "shopifyProductId": store.gid,
     "previewImageUrl": store.previewImageUrl,
     "optionName": select(

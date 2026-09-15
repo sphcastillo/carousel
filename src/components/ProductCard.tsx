@@ -73,16 +73,18 @@ export function ProductCard({
                 className="object-cover transition duration-700 group-hover:scale-105"
               />
             )}
-            <div className="absolute left-3 top-3 flex gap-1">
-              {lengths.map((length) => (
-                <span
-                  key={length}
-                  className="rounded-full border border-black/70 bg-canvas/88 px-[0.55rem] py-[0.2rem] font-mono text-[0.58rem] tracking-[0.16em] text-black uppercase"
-                >
-                  {isLengthOption(length) ? `${length}"` : length}
-                </span>
-              ))}
-            </div>
+            {lengths.length > 0 ? (
+              <div className="absolute bottom-1.5 left-3 grid w-fit grid-cols-2 gap-0.5 sm:grid-cols-3 sm:gap-1 lg:top-3 lg:bottom-auto lg:flex lg:flex-nowrap">
+                {lengths.map((length) => (
+                  <span
+                    key={length}
+                    className="truncate rounded-full border border-black/70 bg-canvas/88 px-[0.55rem] py-[0.2rem] text-center font-mono text-[0.58rem] tracking-[0.16em] text-black uppercase"
+                  >
+                    {isLengthOption(length) ? `${length}"` : length}
+                  </span>
+                ))}
+              </div>
+            ) : null}
           </div>
         </div>
         <div className="mt-4 px-1 text-black">
