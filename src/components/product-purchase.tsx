@@ -1,6 +1,7 @@
 'use client'
 
-import {useMemo, useState, type ReactNode} from 'react'
+import Link from 'next/link'
+import {useEffect, useMemo, useRef, useState, type ReactNode} from 'react'
 import {
   formatMoney,
   HAIR_TYPE_LABELS,
@@ -67,6 +68,8 @@ export function ProductPurchase({
   )
   const [hairType, setHairType] = useState<HairTypeOption>(hairTypes[0] || 'remy')
   const {addItem} = useCart()
+  const [toastDetail, setToastDetail] = useState<string | null>(null)
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const selectedHairType = hairTypes.includes(hairType) ? hairType : hairTypes[0]
   const selected =
@@ -76,7 +79,38 @@ export function ProductPurchase({
         (selectedHairType ? variant.hairType === selectedHairType : true),
     ) || available[0]
 
+  useEffect(
+    () => () => {
+      if (toastTimer.current) clearTimeout(toastTimer.current)
+    },
+    [],
+  )
+
   if (!selected) return null
+
+  function addSelectedToCart() {
+    addItem({
+      productId,
+      slug,
+      name,
+      imageUrl,
+      imageAlt,
+      length: selectedOption || 'default',
+      hairType: selectedHairType,
+      price: selected.price,
+      shopifyProductId: shopifyProductId || undefined,
+      shopifyVariantId: selected.shopifyVariantId || undefined,
+    })
+
+    const details = [
+      selectedOption && selectedOption !== 'default' ? selectedOption : null,
+      selectedHairType ? HAIR_TYPE_LABELS[selectedHairType] : null,
+    ].filter(Boolean)
+    setToastDetail(details.join(' · ') || 'Added to your bag')
+
+    if (toastTimer.current) clearTimeout(toastTimer.current)
+    toastTimer.current = setTimeout(() => setToastDetail(null), 4000)
+  }
 
   return (
     <div className="mt-8 space-y-6">
@@ -110,24 +144,42 @@ export function ProductPurchase({
       <button
         type="button"
         disabled={selected.inStock === false}
-        onClick={() =>
-          addItem({
-            productId,
-            slug,
-            name,
-            imageUrl,
-            imageAlt,
-            length: selectedOption || 'default',
-            hairType: selectedHairType,
-            price: selected.price,
-            shopifyProductId: shopifyProductId || undefined,
-            shopifyVariantId: selected.shopifyVariantId || undefined,
-          })
-        }
+        onClick={addSelectedToCart}
         className="inline-flex w-full items-center justify-center rounded-full bg-primary px-[1.4rem] py-4 font-mono text-[0.7rem] tracking-[0.18em] text-canvas uppercase disabled:cursor-not-allowed disabled:opacity-50"
       >
         {selected.inStock === false ? 'Currently restocking' : addLabel(selectedOption, selectedHairType, usesLength)}
       </button>
+
+      {toastDetail ? (
+        <div
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          className="fixed right-4 bottom-4 z-70 w-[min(22rem,calc(100vw-2rem))] border border-secondary/45 bg-ink px-5 py-5 text-canvas shadow-2xl motion-safe:animate-toast-in sm:right-6 sm:bottom-6"
+        >
+          <button
+            type="button"
+            aria-label="Dismiss notification"
+            onClick={() => setToastDetail(null)}
+            className="absolute top-3 right-3 grid size-7 place-items-center rounded-full border border-canvas/30 font-mono text-sm text-canvas/75 transition hover:bg-canvas hover:text-ink"
+          >
+            <span aria-hidden>×</span>
+          </button>
+          <p className="font-mono text-[0.58rem] tracking-[0.22em] text-secondary uppercase">
+            Added to your bag
+          </p>
+          <p className="mt-2 pr-7 font-display text-2xl leading-tight">{name}</p>
+          <p className="mt-1 font-mono text-[0.6rem] tracking-[0.12em] text-canvas/65 uppercase">
+            {toastDetail}
+          </p>
+          <Link
+            href="/cart"
+            className="mt-4 inline-flex border-b border-secondary/60 pb-0.5 font-mono text-[0.6rem] tracking-[0.18em] text-secondary uppercase transition hover:border-canvas hover:text-canvas"
+          >
+            View bag
+          </Link>
+        </div>
+      ) : null}
     </div>
   )
 }
